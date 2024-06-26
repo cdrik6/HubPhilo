@@ -1,21 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   thread.c                                           :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:13:26 by caguillo          #+#    #+#             */
-/*   Updated: 2024/06/26 00:05:55 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/06/26 04:00:46 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/phi.h"
 
+void	init_phi(t_phi *phi, char **argv)
+{
+	(*phi).nb_philo = ft_atoll(argv[1]);
+	if (argv[5])
+		(*phi).must_eat = ft_atoll(argv[5]);
+	else
+		(*phi).must_eat = -1;
+	(*phi).time_to_die = ft_atoll(argv[2]);
+	(*phi).time_to_eat = ft_atoll(argv[3]);
+	(*phi).time_to_sleep = ft_atoll(argv[4]);
+	(*phi).all_dead = 0;
+}
+
 int	init_mutex(t_phi *phi)
 {
-	if (pthread_mutex_init((*phi).forks, NULL) != 0)
-		return (perror("philo: pthread_mutex_init"), FAILURE);
+	int	i;
+
+	(*phi).forks = ft_calloc((*phi).nb_philo, sizeof(pthread_mutex_t));
+	if ((*phi).forks)
+		return (FAILURE);
+	i = 0;
+	while (i < (*phi).nb_philo)
+	{
+		if (pthread_mutex_init(&((*phi).forks[i]), NULL) != 0)
+			return (perror("philo: pthread_mutex_init"), FAILURE);
+		i++;
+	}
 	if (pthread_mutex_init(&((*phi).m_print), NULL) != 0)
 		return (perror("philo: pthread_mutex_init"), FAILURE);
 	if (pthread_mutex_init(&((*phi).m_meal), NULL) != 0)
@@ -24,6 +47,7 @@ int	init_mutex(t_phi *phi)
 		return (perror("philo: pthread_mutex_init"), FAILURE);
 	if (pthread_mutex_init(&((*phi).m_over), NULL) != 0)
 		return (perror("philo: pthread_mutex_init"), FAILURE);
+	return (SUCCESS);
 }
 
 void	create_thread(t_phi *phi)
@@ -67,23 +91,19 @@ void	join_thread(t_phi *phi)
 	}
 }
 
+// perror("philo: pthread_mutex_destroy");
 void	destroy_mutex(t_phi *phi)
 {
 	int	i;
 
 	i = 0;
-	while (i <= (*phi).nb_philo)
+	while (i < (*phi).nb_philo)
 	{
-		if (pthread_mutex_destroy(&((*phi).philo[i].mutex)) != 0)
-			perror("philo: pthread_mutex_destroy");
-		pthread_mutex_destroy(&((*phi).philo[i].m_starting));
-		pthread_mutex_destroy(&((*phi).philo[i].m_print));
-		pthread_mutex_destroy(&((*phi).philo[i].m_is_dead));
-		pthread_mutex_destroy(&((*phi).philo[i].m_is_over));
-		pthread_mutex_destroy(&((*phi).philo[i].m_meal));
-		pthread_mutex_destroy(&((*phi).philo[i].m_forks));
+		pthread_mutex_destroy(&((*phi).forks[i]));
 		i++;
 	}
-	// if (pthread_mutex_destroy(&((*phi).m_ready)) != 0)
-	// 		perror("philo: pthread_mutex_destroy");
+	pthread_mutex_destroy(&((*phi).m_print));
+	pthread_mutex_destroy(&((*phi).m_meal));
+	pthread_mutex_destroy(&((*phi).m_dead));
+	pthread_mutex_destroy(&((*phi).m_over));
 }

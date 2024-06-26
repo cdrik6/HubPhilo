@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 00:29:37 by caguillo          #+#    #+#             */
-/*   Updated: 2024/06/24 00:39:24 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/06/26 03:38:42 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,21 @@ void	ft_msleep(long ms)
 		usleep(500);
 }
 
-// long	get_ms(t_philo philo)
-// {
-// 	return (get_ms_day() - philo.start_time);
-// }
+void	*ft_calloc(size_t nb_elem, size_t size_in_oct)
+{
+	void	*str;
+	size_t	i;
+
+	if (size_in_oct != 0 && nb_elem > (size_t)(-1) / size_in_oct)
+		return (NULL);
+	str = malloc(nb_elem * size_in_oct);
+	if (!str)
+		return (NULL);
+	i = 0;
+	while (i < nb_elem * size_in_oct)
+	{
+		((unsigned char *)str)[i] = 0;
+		i++;
+	}
+	return (str);
+}

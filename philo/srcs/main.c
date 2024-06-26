@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:58:18 by caguillo          #+#    #+#             */
-/*   Updated: 2024/06/26 00:15:48 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/06/26 03:54:40 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,8 @@ int	main(int argc, char **argv)
 
 	if (check_args(argc, argv) == FAILURE)
 		return (FAILURE);
-	phi = (t_phi){0};
-	init_phi(&phi, argv);
-	
+	// phi = (t_phi){0};
+	init_phi(&phi, argv);	
 	if (init_mutex(&phi) == FAILURE)
 		return (destroy_mutex, FAILURE);
 		
@@ -30,46 +29,36 @@ int	main(int argc, char **argv)
 	if (phi.nb_philo == 1)
 		alone;
 	else 
-		manager(phi);	
+		manager(&phi);	
 	
 	
 	destroy_mutex(&phi);
 	return (SUCCESS);
 }
 
-void	init_phi(t_phi *phi, char **argv)
+int	check_args(int argc, char **argv)
 {
-	(*phi).nb_philo = ft_atoll(argv[1]);
-	if (argv[5])
-		(*phi).must_eat = ft_atoll(argv[5]);
-	else
-		(*phi).must_eat = -1;
-	(*phi).time_to_die = ft_atoll(argv[2]);
-	(*phi).time_to_eat = ft_atoll(argv[3]);
-	(*phi).time_to_sleep = ft_atoll(argv[4]);
+	if (argc != 5 && argc != 6)
+		return (putstr_fd(ERR_ARG, 2), putstr_fd(USAGE, 2), FAILURE);
+	return (check_argv(argv));
 }
 
-// void	init_phi(t_phi *phi, char **argv)
-// {
-// 	int	i;
+int	check_argv(char **argv)
+{
+	if (ft_atoll(argv[1]) <= 0)
+		return (putstr_fd(MIN_NBP, 2), FAILURE);
+	if (ft_atoll(argv[1]) > MAX)
+		return (putstr_fd(MAX_NBP, 2), FAILURE);
+	if (ft_atoll(argv[2]) < 0)
+		return (putstr_fd(ERR_TTD, 2), FAILURE);
+	if (ft_atoll(argv[3]) < 0)
+		return (putstr_fd(ERR_TTE, 2), FAILURE);
+	if (ft_atoll(argv[4]) < 0)
+		return (putstr_fd(ERR_TTS, 2), FAILURE);
+	if (argv[5] && ft_atoll(argv[5]) < 0)
+		return (putstr_fd(ERR_TME, 2), FAILURE);
+	return (SUCCESS);
+}
 
-// 	(*phi).nb_philo = ft_atoll(argv[1]);
-// 	if (argv[5])
-// 		(*phi).must_eat = ft_atoll(argv[5]);
-// 	else
-// 		(*phi).must_eat = -1;
-// 	i = 0;
-// 	while (i <= (*phi).nb_philo)
-// 	{
 
-// 		(*phi).time_to_die = ft_atoll(argv[2]);
-// 		(*phi).time_to_eat = ft_atoll(argv[3]);
-// 		(*phi).time_to_sleep = ft_atoll(argv[4]);
-// 		(*phi).philo[i].is_dead = &((*phi).all_dead);
 
-// 		// (*phi).philo[i].start = gettime_ms();
-// 		// (*phi).philo[i].last_meal = gettime_ms();
-// 		// (*phi).philo[i].id = i;
-// 		i++;
-// 	}
-// }

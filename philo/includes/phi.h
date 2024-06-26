@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:22:06 by caguillo          #+#    #+#             */
-/*   Updated: 2024/06/25 23:56:29 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/06/26 04:11:38 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,14 @@ typedef struct s_philo
 
 typedef struct s_phi
 {
+	struct s_philo	*philo;
+	pthread_mutex_t	*forks;
 	int				nb_philo;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				must_eat;
 	int				all_dead;
-	pthread_mutex_t	*forks;
 	pthread_mutex_t	m_print;
 	pthread_mutex_t	m_meal;
 	pthread_mutex_t	m_dead;
