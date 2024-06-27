@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 20:32:11 by caguillo          #+#    #+#             */
-/*   Updated: 2024/06/25 00:37:23 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/06/27 04:37:26 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,23 @@
 void	*routine(void *data)
 {
 	t_philo	*philo;
-	int		starting;
 
+	// int		starting;
 	philo = (t_philo *)data;
 	while (is_dead(philo) == 0)
 	{
-		pthread_mutex_lock(&((*philo).m_starting));
-		starting = (*philo).starting;
-		pthread_mutex_unlock(&((*philo).m_starting));
-		if (starting == 1)
-		{
-			pthread_mutex_lock(&((*philo).m_starting));
-			(*philo).starting = 0;
-			pthread_mutex_unlock(&((*philo).m_starting));
-			eating(philo);
-			sleeping(philo);
-			thinking(philo);
-		}
+		// pthread_mutex_lock(&((*philo).m_starting));
+		// starting = (*philo).starting;
+		// pthread_mutex_unlock(&((*philo).m_starting));
+		// if (starting == 1)
+		// {
+		// pthread_mutex_lock(&((*philo).m_starting));
+		// (*philo).starting = 0;
+		// pthread_mutex_unlock(&((*philo).m_starting));
+		eating(philo);
+		sleeping(philo);
+		thinking(philo);
+		// }
 	}
 	return (data);
 }
@@ -60,31 +60,31 @@ void	*routine(void *data)
 
 void	eating(t_philo *philo)
 {
-	int	forks;
-
-	pthread_mutex_lock(&((*philo).m_forks));
-	forks = (*philo).forks;
-	pthread_mutex_unlock(&((*philo).m_forks));
-	if (forks == 1 && is_dead(philo) == 0)
-	// if (is_dead(philo) == 0)
+	// int	forks;
+	// pthread_mutex_lock(&((*philo).m_forks));
+	// forks = (*philo).forks;
+	// pthread_mutex_unlock(&((*philo).m_forks));
+	// if (forks == 1 && is_dead(philo) == 0)
+	if (is_dead(philo) == 0)
 	{
-		pthread_mutex_lock(&((*philo).mutex));
+		//
+		pthread_mutex_lock((*philo).right_fork);
+		print_log(philo, FORKING);
+		pthread_mutex_lock((*philo).left_fork);
+		print_log(philo, FORKING);
 		(*philo).eating = 1;
-		pthread_mutex_unlock(&((*philo).mutex));
-		//
-		pthread_mutex_lock(&((*philo).m_meal));
-		(*philo).nb_meal++;
-		(*philo).last_meal = gettime_ms();
-		pthread_mutex_unlock(&((*philo).m_meal));
-		//
 		print_log(philo, EATING);
 		//
-		ft_msleep((*philo).time_to_eat);
+		pthread_mutex_lock((*philo).m_meal);
+		(*philo).nb_meal++;
+		(*philo).last_meal = gettime_ms();
+		pthread_mutex_unlock((*philo).m_meal);
 		//
-		pthread_mutex_lock(&((*philo).mutex));
+		ft_msleep((*philo).time_to_eat);
 		(*philo).eating = 0;
-		(*philo).sleeping = 0;
-		pthread_mutex_unlock(&((*philo).mutex));
+		pthread_mutex_unlock((*philo).left_fork);
+		pthread_mutex_unlock((*philo).right_fork);
+		//
 	}
 }
 
@@ -94,22 +94,22 @@ void	sleeping(t_philo *philo)
 	// if ((*philo).sleeping == 0 && (*philo).is_dead == 0
 	//	&& is_over(philo) == 0)
 	// if ((*philo).sleeping == 0 && is_dead(philo) == 0 && is_over(philo) == 0)
-	if ((*philo).sleeping == 0 && is_over(philo) == 0)
-	{
-		pthread_mutex_lock(&((*philo).mutex));
-		(*philo).sleeping = 1;
-		(*philo).thinking = 0;
-		pthread_mutex_unlock(&((*philo).mutex));
-		// pthread_mutex_lock(&((*philo).m_print));
-		print_log(philo, SLEEPING);
-		// pthread_mutex_unlock(&((*philo).m_print));
-		//
-		ft_msleep((*philo).time_to_sleep);
-		//
-		// pthread_mutex_lock(&((*philo).mutex));
-		// (*philo).thinking = 0;
-		// pthread_mutex_unlock(&((*philo).mutex));
-	}
+	// if ((*philo).sleeping == 0 && is_over(philo) == 0)
+	// {
+	// 	pthread_mutex_lock(&((*philo).mutex));
+	// 	(*philo).sleeping = 1;
+	// 	(*philo).thinking = 0;
+	// 	pthread_mutex_unlock(&((*philo).mutex));
+	// pthread_mutex_lock(&((*philo).m_print));
+	print_log(philo, SLEEPING);
+	// pthread_mutex_unlock(&((*philo).m_print));
+	//
+	ft_msleep((*philo).time_to_sleep);
+	//
+	// pthread_mutex_lock(&((*philo).mutex));
+	// (*philo).thinking = 0;
+	// pthread_mutex_unlock(&((*philo).mutex));
+	// }
 }
 
 void	thinking(t_philo *philo)
@@ -118,64 +118,33 @@ void	thinking(t_philo *philo)
 	// if ((*philo).thinking == 0 && (*philo).is_dead == 0
 	//	&& is_over(philo) == 0)
 	// if ((*philo).thinking == 0 && is_dead(philo) == 0 && is_over(philo) == 0)
-	if ((*philo).thinking == 0 && is_over(philo) == 0)
-	{
-		pthread_mutex_lock(&((*philo).mutex));
-		(*philo).thinking = 1;
-		pthread_mutex_unlock(&((*philo).mutex));
-		// pthread_mutex_lock(&((*philo).m_print));
-		print_log(philo, THINKING);
-		// pthread_mutex_unlock(&((*philo).m_print));
-		// ft_msleep(1);
-	}
+	// if ((*philo).thinking == 0 && is_over(philo) == 0)
+	// {
+	// 	pthread_mutex_lock(&((*philo).mutex));
+	// 	(*philo).thinking = 1;
+	// 	pthread_mutex_unlock(&((*philo).mutex));
+	// pthread_mutex_lock(&((*philo).m_print));
+	print_log(philo, THINKING);
+	// pthread_mutex_unlock(&((*philo).m_print));
+	// ft_msleep(1);
+	// }
 }
 
-int	is_to_die(t_philo *philo)
+void	alone(t_phi *phi)
 {
-	pthread_mutex_lock(&((*philo).m_meal));
-	if ((gettime_ms() - (*philo).last_meal) > (*philo).time_to_die)
-	{
-		pthread_mutex_unlock(&((*philo).m_meal));
-		return (1);
-	}
-	pthread_mutex_unlock(&((*philo).m_meal));
-	return (0);
-}
-
-int	is_dead(t_philo *philo)
-{
-	pthread_mutex_lock(&((*philo).m_is_dead));
-	if (*((*philo).is_dead) == 1)
-	{
-		pthread_mutex_unlock(&((*philo).m_is_dead));
-		return (1);
-	}
-	pthread_mutex_unlock(&((*philo).m_is_dead));
-	return (0);
-}
-
-int	is_over(t_philo *philo)
-{
-	pthread_mutex_lock(&((*philo).m_is_over));
-	if ((*philo).is_over == 1)
-	{
-		pthread_mutex_unlock(&((*philo).m_is_over));
-		return (1);
-	}
-	pthread_mutex_unlock(&((*philo).m_is_over));
-	return (0);
+	print_log(&((*phi).philo[0]), FORKING);
+	ft_msleep((*phi).philo[0].time_to_die);
+	print_log(&((*phi).philo[0]), DIED);
 }
 
 // int	is_over(t_philo *philo)
 // {
-// 	if ((*philo).must_eat == -1)
-// 		return (0);
-// 	if ((*philo).nb_meal >= (*philo).must_eat)
+// 	pthread_mutex_lock(&((*philo).m_is_over));
+// 	if ((*philo).is_over == 1)
 // 	{
-// 		pthread_mutex_lock(&((*philo).mutex));
-// 		(*philo).is_over = 1;
-// 		pthread_mutex_unlock(&((*philo).mutex));
+// 		pthread_mutex_unlock(&((*philo).m_is_over));
 // 		return (1);
 // 	}
+// 	pthread_mutex_unlock(&((*philo).m_is_over));
 // 	return (0);
 // }

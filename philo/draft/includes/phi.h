@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:22:06 by caguillo          #+#    #+#             */
-/*   Updated: 2024/06/27 04:12:15 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/06/26 21:42:23 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <sys/time.h>
 # include <unistd.h>
 
+//# define MAX 200 /*** faire un flag -D comme dans GNL ***/
 # ifndef MAX_PHILO
 #  define MAX_PHILO 200
 # endif
@@ -46,46 +47,38 @@ typedef struct s_philo
 {
 	pthread_t		thread;
 	int				id;
+	int				eating;
 	long			start;
 	long			last_meal;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
 	int				nb_meal;
-	int				eating;
-	int				*dead;
-	pthread_mutex_t	*right_fork;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*m_print;
-	pthread_mutex_t	*m_dead;
-	pthread_mutex_t	*m_meal;
 	// int				is_over;
-	// pthread_mutex_t	m_is_over;
+	// int				*is_dead;
+	struct s_phi	*phi;
 }					t_philo;
 
 typedef struct s_phi
 {
-	t_philo			*philo;
 	int				nb_philo;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
 	int				must_eat;
-	int				is_dead;
+	// struct s_philo	*philo;
+	pthread_mutex_t	*forks;
+	int				dead;
+	int				over;
 	pthread_mutex_t	m_print;
-	pthread_mutex_t	m_dead;
 	pthread_mutex_t	m_meal;
-	// int				ready;
+	pthread_mutex_t	m_dead;
+	pthread_mutex_t	m_over;
+	
 }					t_phi;
 
 // main.c
+void				init_phi(t_phi *phi, char **argv);
+// data.c
 int					check_args(int argc, char **argv);
 int					check_argv(char **argv);
-
-// init.c
-int					init_a_mutex(pthread_mutex_t mutex);
-int					init_phi(t_phi *phi, t_philo *philo, char **argv);
-int					init_forks(pthread_mutex_t *fork, int nb_philo);
-void				init_input(t_philo *philo, char **argv);
-void				init_philo(t_phi *phi, t_philo *philo,
-						pthread_mutex_t *fork, char **av);
 
 // tools.c
 void				putstr_fd(char *str, int fd);
@@ -98,32 +91,32 @@ long				gettime_ms(void);
 // long				get_ms(t_philo philo);
 
 // thread.c
-// void				init_mutex(t_phi *phi);
-// void				create_thread_manager(t_phi *phi);
+int					init_mutex(t_phi *phi);
+void				create_thread_manager(t_phi *phi);
 // int					manager(t_phi *phi);
-int					create_thread(t_phi *phi);
+void				create_thread(t_phi *phi);
 void				join_thread(t_phi *phi);
-void	destroy_mutex(t_phi *phi, pthread_mutex_t *fork);
+void				destroy_mutex(t_phi *phi);
 
 // routine.c
 void				*routine(void *data);
 void				eating(t_philo *philo);
 void				sleeping(t_philo *philo);
 void				thinking(t_philo *philo);
-void				alone(t_phi *phi);
-// int					is_over(t_philo *philo);
-
-// monitor.c
-int					is_a_dead(t_phi *phi);
-int					is_all_over(t_phi *phi);
-void				monitor(t_phi *phi);
 int					is_to_die(t_philo *philo);
 int					is_dead(t_philo *philo);
+int					is_over(t_philo *philo);
 
-// // forks.c
-// void				allocate_forks(t_phi *phi);
-// void				even_allocation(t_phi *phi);
-// int					is_last(t_phi *phi);
-// void				odd_allocation(t_phi *phi);
+// manager.c
+int					is_a_dead(t_phi *phi);
+int					is_all_over(t_phi *phi);
+void				*manager(void *data);
+void				alone(t_phi *phi);
+
+// forks.c
+void				allocate_forks(t_phi *phi);
+void				even_allocation(t_phi *phi);
+int					is_last(t_phi *phi);
+void				odd_allocation(t_phi *phi);
 
 #endif

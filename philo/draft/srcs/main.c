@@ -6,34 +6,30 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:58:18 by caguillo          #+#    #+#             */
-/*   Updated: 2024/06/27 04:44:14 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/06/26 21:43:58 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/phi.h"
 
-// phi = (t_phi){0};
 int	main(int argc, char **argv)
 {
-	t_phi			phi;
-	t_philo			philo[MAX_PHILO];
-	pthread_mutex_t	fork[MAX_PHILO];
-	int				nb_philo;
+	t_phi	phi;
 
 	if (check_args(argc, argv) == FAILURE)
 		return (FAILURE);
-	nb_philo = ft_atoll(argv[1]);
-	if (init_phi(&phi, philo, argv) == SUCCESS && init_forks(fork,
-			nb_philo) == SUCCESS)
-	{
-		init_philo(&phi, philo, fork, argv);
-		if (create_thread(&phi) == SUCCESS)
-		{
-			monitor(&phi);			
-			join_thread(&phi);
-		}
-	}
-	destroy_mutex(&phi, fork);
+	// phi = (t_phi){0};
+	init_phi(&phi, argv);
+	if (init_mutex(&phi) == FAILURE)
+		return (destroy_mutex, FAILURE);
+	create_thread_manager(&phi);
+	create_thread(&phi);
+	join_thread(&phi);
+	if (phi.nb_philo == 1)
+		alone;
+	else
+		manager(&phi);
+	destroy_mutex(&phi);
 	return (SUCCESS);
 }
 
