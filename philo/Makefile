@@ -6,7 +6,7 @@
 #    By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/25 23:32:02 by caguillo          #+#    #+#              #
-#    Updated: 2024/06/27 04:41:11 by caguillo         ###   ########.fr        #
+#    Updated: 2024/06/28 01:13:00 by caguillo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,8 +25,8 @@ INCS_DIR	=	-Iincludes
 
 CC			=	gcc
 #CFLAGS		=	-Wall -Wextra -Werror -pthread -D MAX_PHILO=200
-#CFLAGS		=	-Wall -Wextra -Werror -pthread -fsanitize=thread -g
-CFLAGS		=	-Wall -Wextra -Werror -pthread -g 
+CFLAGS		=	-Wall -Wextra -Werror -pthread -fsanitize=thread -g
+#CFLAGS		=	-Wall -Wextra -Werror -pthread -g 
 
 OBJS		=	$(SRCS:.c=.o)
 

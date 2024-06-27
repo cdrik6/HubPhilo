@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:22:06 by caguillo          #+#    #+#             */
-/*   Updated: 2024/06/27 04:12:15 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/06/28 01:02:59 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ typedef struct s_phi
 	pthread_mutex_t	m_print;
 	pthread_mutex_t	m_dead;
 	pthread_mutex_t	m_meal;
-	// int				ready;
 }					t_phi;
 
 // main.c
@@ -93,17 +92,13 @@ int					is_space(char c);
 long long			ft_atoll(char *str);
 void				ft_msleep(long ms);
 void				print_log(t_philo *philo, char *str);
-// void				print_log(long timestamp_ms, int philo_id, char *str);
 long				gettime_ms(void);
-// long				get_ms(t_philo philo);
 
 // thread.c
-// void				init_mutex(t_phi *phi);
-// void				create_thread_manager(t_phi *phi);
-// int					manager(t_phi *phi);
 int					create_thread(t_phi *phi);
-void				join_thread(t_phi *phi);
-void	destroy_mutex(t_phi *phi, pthread_mutex_t *fork);
+int					join_thread(t_phi *phi);
+int					destroy_a_mutex(pthread_mutex_t mutex);
+int					destroy_mutex(t_phi *phi, pthread_mutex_t *fork);
 
 // routine.c
 void				*routine(void *data);
@@ -119,11 +114,5 @@ int					is_all_over(t_phi *phi);
 void				monitor(t_phi *phi);
 int					is_to_die(t_philo *philo);
 int					is_dead(t_philo *philo);
-
-// // forks.c
-// void				allocate_forks(t_phi *phi);
-// void				even_allocation(t_phi *phi);
-// int					is_last(t_phi *phi);
-// void				odd_allocation(t_phi *phi);
 
 #endif

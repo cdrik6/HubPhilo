@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 22:59:31 by caguillo          #+#    #+#             */
-/*   Updated: 2024/06/27 04:47:44 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/06/27 23:51:58 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 int	is_a_dead(t_phi *phi)
 {
 	int	i;
-	
-	i = 1;
-	while (i <= (*phi).nb_philo)
+
+	i = 0;
+	while (i < (*phi).nb_philo)
 	{
 		if (is_to_die(&((*phi).philo[i])) == 1)
 		{
@@ -25,18 +25,6 @@ int	is_a_dead(t_phi *phi)
 			pthread_mutex_lock(&((*phi).m_dead));
 			*((*phi).philo[i].dead) = 1;
 			pthread_mutex_unlock(&((*phi).m_dead));
-			// pthread_mutex_lock(&((*phi).philo[i].m_dead));
-			// *((*phi).philo[i].dead) = 1;
-			// pthread_mutex_unlock(&((*phi).philo[i].m_dead));
-			// //
-			// i = 0;
-			// while (i <= (*phi).nb_philo)
-			// {
-			// 	printf("%d is dead = %d\n", (*phi).philo[i].id,
-			// 		*((*phi).philo[i].is_dead));
-			// 	i++;
-			// }
-			// //
 			return (1);
 		}
 		i++;
@@ -46,17 +34,17 @@ int	is_a_dead(t_phi *phi)
 
 int	is_all_over(t_phi *phi)
 {
-	int	i;	
+	int	i;
 
 	if ((*phi).must_eat == -1)
 		return (0);
 	i = 0;
 	while (i < (*phi).nb_philo)
 	{
-		pthread_mutex_lock(&((*phi).m_meal));				
+		pthread_mutex_lock(&((*phi).m_meal));
 		if ((*phi).philo[i].nb_meal < (*phi).must_eat)
 			return (pthread_mutex_unlock(&((*phi).m_meal)), 0);
-		pthread_mutex_unlock(&((*phi).m_meal));	
+		pthread_mutex_unlock(&((*phi).m_meal));
 		i++;
 	}
 	// i = 0;
@@ -72,19 +60,11 @@ int	is_all_over(t_phi *phi)
 
 void	monitor(t_phi *phi)
 {
-	printf("ici\n");			
-	if ((*phi).nb_philo == 1)
-		return (alone(phi));
-	
 	while (1)
 	{
 		if (is_a_dead(phi) == 1 || is_all_over(phi) == 1)
 			break ;
-		// printf("ici\n");
-		// usleep(100);
-		// allocate_forks(phi);
-		// ft_msleep((*phi).philo[0].time_to_eat);
-	}	
+	}
 }
 
 int	is_to_die(t_philo *philo)
@@ -111,8 +91,6 @@ int	is_dead(t_philo *philo)
 	return (0);
 }
 
-
-
 // int		ready;
 // ready = 0;
 // while (ready != (*phi).nb_philo + 1)
@@ -123,34 +101,3 @@ int	is_dead(t_philo *philo)
 // 	pthread_mutex_unlock(&((*phi).philo[0].mutex));
 // 	// printf("%d\n", ready);
 // }
-
-/*
-int	one_eating(t_phi *phi)
-{
-	int	i;
-
-	i = 1;
-	while (i <= (*phi).nb_philo)
-	{
-		pthread_mutex_lock(&((*phi).philo[0].mutex));
-		if (is_to_die(&((*phi).philo[i])) == 1)
-		{
-			pthread_mutex_lock(&((*phi).philo[i].m_is_dead));
-			*((*phi).philo[i].is_eating) = 1;
-			pthread_mutex_unlock(&((*phi).philo[i].m_is_dead));
-			// //
-			// i = 0;
-			// while (i <= (*phi).nb_philo)
-			// {
-			// 	printf("%d is dead = %d\n", (*phi).philo[i].id,
-			// 		*((*phi).philo[i].is_dead));
-			// 	i++;
-			// }
-			// //
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-*/

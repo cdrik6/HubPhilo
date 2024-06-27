@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:13:26 by caguillo          #+#    #+#             */
-/*   Updated: 2024/06/27 03:19:03 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/06/28 00:38:33 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,7 @@
 int	init_a_mutex(pthread_mutex_t mutex)
 {
 	if (pthread_mutex_init(&mutex, NULL) != 0)
-	{
-		// if (pthread_mutex_destroy(&(mutex)) != 0)
-		// 	return (perror("philo: pthread_mutex_destroy"), FAILURE);
 		return (perror("philo: pthread_mutex_init"), FAILURE);
-	}
 	return (SUCCESS);
 }
 
@@ -70,7 +66,7 @@ void	init_philo(t_phi *phi, t_philo *philo, pthread_mutex_t *fork, char **av)
 	int	i;
 
 	i = 0;
-	while (i <= (*phi).nb_philo)
+	while (i < (*phi).nb_philo)
 	{
 		philo[i].id = i + 1;
 		philo[i].start = gettime_ms();

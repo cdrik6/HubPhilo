@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 00:29:37 by caguillo          #+#    #+#             */
-/*   Updated: 2024/06/27 04:38:11 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/06/28 01:12:09 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,3 @@ void	ft_msleep(long ms)
 	while ((gettime_ms() - start) < ms)
 		usleep(500);
 }
-
-// long	get_ms(t_philo philo)
-// {
-// 	return (get_ms_day() - philo.start_time);
-// }
