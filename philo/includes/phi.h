@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:22:06 by caguillo          #+#    #+#             */
-/*   Updated: 2024/06/28 01:02:59 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/06/28 19:52:16 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,8 @@ int					destroy_mutex(t_phi *phi, pthread_mutex_t *fork);
 
 // routine.c
 void				*routine(void *data);
-void				eating(t_philo *philo);
+void				eating_even(t_philo *philo);
+void				eating_odd(t_philo *philo);
 void				sleeping(t_philo *philo);
 void				thinking(t_philo *philo);
 void				alone(t_phi *phi);

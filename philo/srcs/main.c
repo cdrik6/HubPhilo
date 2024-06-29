@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:58:18 by caguillo          #+#    #+#             */
-/*   Updated: 2024/06/28 01:05:42 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/06/28 20:37:25 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,11 @@ int	main(int argc, char **argv)
 		init_philo(&phi, philo, fork, argv);
 		if (nb_philo == 1)
 			alone(&phi);
-		else if (create_thread(&phi) == SUCCESS && join_thread(&phi) == SUCCESS)
+		else if (create_thread(&phi) == SUCCESS)
+		{
 			monitor(&phi);
+			join_thread(&phi);
+		}
 	}
 	return (destroy_mutex(&phi, fork));
 }
