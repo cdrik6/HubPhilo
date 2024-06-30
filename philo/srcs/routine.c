@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 20:32:11 by caguillo          #+#    #+#             */
-/*   Updated: 2024/06/29 00:45:12 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/06/30 03:34:10 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,19 @@
 void	*routine(void *data)
 {
 	t_philo	*philo;
+	//int nb_philo = 3;
 
 	philo = (t_philo *)data;
 	if ((*philo).id % 2 == 0)
 		ft_msleep(1);
+	// if ((*philo).id % 3 == 0)
+	// 	ft_msleep((*philo).time_to_eat + 1);	
 	while (is_dead(philo) == 0)
 	{
 		if ((*philo).id % 2 == 0)
 			eating_even(philo);
 		else
-			eating_odd(philo);
+			eating_odd(philo);		
 		sleeping(philo);
 		thinking(philo);
 	}
@@ -34,8 +37,8 @@ void	*routine(void *data)
 
 void	eating_even(t_philo *philo)
 {
-	if (is_dead(philo) == 0)
-	{
+	// if (is_dead(philo) == 0)
+	// {
 		//
 		pthread_mutex_lock((*philo).left_fork);
 		print_log(philo, FORKING);
@@ -55,13 +58,13 @@ void	eating_even(t_philo *philo)
 		pthread_mutex_unlock((*philo).right_fork);
 		pthread_mutex_unlock((*philo).left_fork);
 		//
-	}
+	// }
 }
 
 void	eating_odd(t_philo *philo)
 {
-	if (is_dead(philo) == 0)
-	{
+	// if (is_dead(philo) == 0)
+	// {
 		//
 		pthread_mutex_lock((*philo).right_fork);
 		print_log(philo, FORKING);
@@ -81,33 +84,26 @@ void	eating_odd(t_philo *philo)
 		pthread_mutex_unlock((*philo).left_fork);
 		pthread_mutex_unlock((*philo).right_fork);
 		//
-	}
+	// }
 }
 
 void	sleeping(t_philo *philo)
 {
-	if (is_dead(philo) == 0)
-	{
+	// if (is_dead(philo) == 0)
+	// {
 		print_log(philo, SLEEPING);
 		ft_msleep((*philo).time_to_sleep);
-	}
+	// }
 }
 
 void	thinking(t_philo *philo)
 {
-	if (is_dead(philo) == 0)
-	{
+	// if (is_dead(philo) == 0)
+	// {
 		print_log(philo, THINKING);
 		usleep(500);
-	}
-}
-
-void	alone(t_phi *phi)
-{
-	// printf("ici\n");
-	print_log(&((*phi).philo[0]), FORKING);
-	ft_msleep((*phi).philo[0].time_to_die);
-	print_log(&((*phi).philo[0]), DIED);
+		//ft_msleep((*philo).time_to_eat - (*philo).time_to_sleep);
+	//  }
 }
 
 // int	is_over(t_philo *philo)

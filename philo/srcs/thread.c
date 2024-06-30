@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:58:12 by caguillo          #+#    #+#             */
-/*   Updated: 2024/06/28 01:07:23 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/06/29 22:49:36 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ int	create_thread(t_phi *phi)
 	i = 0;
 	while (i < (*phi).nb_philo)
 	{
-		if (pthread_create(&((*phi).philo[i].thread), NULL, &routine,
-				&((*phi).philo[i])) != 0)
-			return (perror("philo: pthread_create"), FAILURE);
+		if (pthread_create(&((*phi).philos[i].thread), NULL, &routine,
+				&((*phi).philos[i])) != 0)
+			return (perror("philo: pthread_create"), KO);
 		i++;
 	}
-	return (SUCCESS);
+	return (OK);
 }
 
 int	join_thread(t_phi *phi)
@@ -34,23 +34,23 @@ int	join_thread(t_phi *phi)
 	i = 0;
 	while (i < (*phi).nb_philo)
 	{
-		if (pthread_join((*phi).philo[i].thread, NULL) != 0)
-			return (perror("philo: pthread_join"), FAILURE);
+		if (pthread_join((*phi).philos[i].thread, NULL) != 0)
+			return (perror("philo: pthread_join"), KO);
 		i++;
 	}
-	return (SUCCESS);
+	return (OK);
 }
 
 int	destroy_a_mutex(pthread_mutex_t mutex)
 {
 	if (pthread_mutex_destroy(&(mutex)) != 0)
-		return (perror("philo: pthread_mutex_destroy"), FAILURE);
-	return (SUCCESS);
+		return (perror("philo: pthread_mutex_destroy"), KO);
+	return (OK);
 }
 
 // if (pthread_mutex_destroy(&((*phi).m_ready)) != 0)
 // 		perror("philo: pthread_mutex_destroy");
-int	destroy_mutex(t_phi *phi, pthread_mutex_t *fork)
+int	destroy_mutex(t_phi *phi, pthread_mutex_t *forks)
 {
 	int	i;
 	int	fail;
@@ -59,17 +59,17 @@ int	destroy_mutex(t_phi *phi, pthread_mutex_t *fork)
 	i = 0;
 	while (i < (*phi).nb_philo)
 	{
-		if (destroy_a_mutex(fork[i]) == FAILURE)
+		if (destroy_a_mutex(forks[i]) == KO)
 			fail++;
 		i++;
 	}
-	if (destroy_a_mutex((*phi).m_print) == FAILURE)
+	if (destroy_a_mutex((*phi).m_print) == KO)
 		fail++;
-	if (destroy_a_mutex((*phi).m_dead) == FAILURE)
+	if (destroy_a_mutex((*phi).m_dead) == KO)
 		fail++;
-	if (destroy_a_mutex((*phi).m_meal) == FAILURE)
+	if (destroy_a_mutex((*phi).m_meal) == KO)
 		fail++;
 	if (!fail)
-		return (SUCCESS);
-	return (FAILURE);
+		return (OK);
+	return (KO);
 }

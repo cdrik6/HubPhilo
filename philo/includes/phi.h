@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:22:06 by caguillo          #+#    #+#             */
-/*   Updated: 2024/06/28 19:52:16 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/06/30 03:54:19 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 # ifndef MAX_PHILO
 #  define MAX_PHILO 200
 # endif
-# define SUCCESS 0
-# define FAILURE 1
+# define OK 0
+# define KO 1
 # define NBM 3
 # define ERR_ARG "philo: wrong number of arguments\n"
 # define USAGE \
@@ -59,13 +59,12 @@ typedef struct s_philo
 	pthread_mutex_t	*m_print;
 	pthread_mutex_t	*m_dead;
 	pthread_mutex_t	*m_meal;
-	// int				is_over;
-	// pthread_mutex_t	m_is_over;
 }					t_philo;
 
 typedef struct s_phi
 {
-	t_philo			*philo;
+	t_philo			*philos;
+	// pthread_mutex_t	*forks;
 	int				nb_philo;
 	int				must_eat;
 	int				is_dead;
@@ -76,15 +75,15 @@ typedef struct s_phi
 
 // main.c
 int					check_args(int argc, char **argv);
-int					check_argv(char **argv);
+void				alone(t_phi *phi);
 
 // init.c
-int					init_a_mutex(pthread_mutex_t mutex);
+int					init_a_mutex(pthread_mutex_t *mutex);
 int					init_phi(t_phi *phi, t_philo *philo, char **argv);
 int					init_forks(pthread_mutex_t *fork, int nb_philo);
-void				init_input(t_philo *philo, char **argv);
-void				init_philo(t_phi *phi, t_philo *philo,
+void				init_philos(t_phi *phi, t_philo *philo,
 						pthread_mutex_t *fork, char **av);
+// void				init_input(t_philo *philo, char **argv);
 
 // tools.c
 void				putstr_fd(char *str, int fd);
@@ -106,7 +105,7 @@ void				eating_even(t_philo *philo);
 void				eating_odd(t_philo *philo);
 void				sleeping(t_philo *philo);
 void				thinking(t_philo *philo);
-void				alone(t_phi *phi);
+
 // int					is_over(t_philo *philo);
 
 // monitor.c

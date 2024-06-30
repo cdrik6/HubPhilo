@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 00:29:37 by caguillo          #+#    #+#             */
-/*   Updated: 2024/06/28 01:12:09 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/06/29 21:51:28 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,13 @@ long long	ft_atoll(char *str)
 
 void	print_log(t_philo *philo, char *str)
 {
-	pthread_mutex_lock((*philo).m_print);
 	if (is_dead(philo) == 0)
+	{
+		pthread_mutex_lock((*philo).m_print);	
 		printf("%ld %d %s\n", gettime_ms() - (*philo).start, (*philo).id, str);
-	pthread_mutex_unlock((*philo).m_print);
+		pthread_mutex_unlock((*philo).m_print);	
+	}
+	
 }
 
 // struct timeval {
