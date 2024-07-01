@@ -15,3 +15,7 @@ https://drvegapunk.notion.site/Philosophers-dc59887c55df41fca09739246a14f0f0
 
 valgrind --tool=helgrind
 valgrind --tool=drd
+
+PhiloTuto
+![alt text](image.png)
+![alt text](image-1.png)

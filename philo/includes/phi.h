@@ -6,13 +6,14 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:22:06 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/01 06:14:56 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/02 00:31:42 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHI_H
 # define PHI_H
 
+# include <limits.h>
 # include <pthread.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -76,7 +77,7 @@ typedef struct s_phi
 
 // main.c
 int					check_args(int argc, char **argv);
-void				alone(t_phi *phi);
+// void				alone(t_phi *phi);
 
 // init.c
 int					init_a_mutex(pthread_mutex_t *mutex);
@@ -91,16 +92,19 @@ void				init_philos(t_phi *phi, t_philo *philo,
 // tools.c
 void				putstr_fd(char *str, int fd);
 int					is_space(char c);
-long long			ft_atoll(char *str);
 void				ft_msleep(long ms);
 void				print_log(t_philo *philo, char *str);
 long				gettime_ms(void);
+long long			ft_atoll(char *str);
+long long			check_limit(int sign, unsigned long long nbr);
 
 // thread.c
 int					create_thread(t_phi *phi);
 int					join_thread(t_phi *phi, int issue_id);
 int					destroy_a_mutex(pthread_mutex_t *mutex);
 int					destroy_mutex(t_phi *phi, pthread_mutex_t *fork);
+int					destroy_mutex_id(t_phi *phi, pthread_mutex_t *forks,
+						int mut_id);
 
 // routine.c
 void				*routine(void *data);
@@ -108,8 +112,6 @@ void				eating_even(t_philo *philo);
 void				eating_odd(t_philo *philo);
 void				sleeping(t_philo *philo);
 void				thinking(t_philo *philo);
-
-// int					is_over(t_philo *philo);
 
 // monitor.c
 int					is_a_dead(t_phi *phi);

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:58:12 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/01 05:41:09 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/01 22:44:08 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 int	create_thread(t_phi *phi)
 {
 	int	i;
-	
 
 	i = 0;
 	while (i < (*phi).nb_philo)
@@ -30,17 +29,17 @@ int	create_thread(t_phi *phi)
 	return (0);
 }
 
-//while (i < (*phi).nb_philo)
+// while (i < (*phi).nb_philo)
 int	join_thread(t_phi *phi, int issue_id)
 {
 	int	i;
-	int max;
+	int	max;
 
 	if (issue_id == 0)
 		max = (*phi).nb_philo;
 	else
-		max = issue_id -1;
-	i = 0;	
+		max = issue_id - 1;
+	i = 0;
 	while (i < max)
 	{
 		if (pthread_join((*phi).philos[i].thread, NULL) != 0)
@@ -57,8 +56,7 @@ int	destroy_a_mutex(pthread_mutex_t *mutex)
 	return (OK);
 }
 
-// if (pthread_mutex_destroy(&((*phi).m_ready)) != 0)
-// 		perror("philo: pthread_mutex_destroy");
+// mut_id == 0
 int	destroy_mutex(t_phi *phi, pthread_mutex_t *forks)
 {
 	int	i;
@@ -80,5 +78,36 @@ int	destroy_mutex(t_phi *phi, pthread_mutex_t *forks)
 		fail++;
 	if (!fail)
 		return (OK);
+	return (KO);
+}
+
+// mut_id != 0
+// received id where init_mutex failed, so destroy until id excluded
+// if mut_id = 1 means init[0] failed, the first to be init, so destroy nothing
+// if mut_id = nb_philo means init[nb-1] failed, so destroy til init[nb-2]
+// if mut_id = nb_philo + 1 means init[print] failed, so destroy til init[nb-1]
+// if mut_id = nb_philo + 2 means init[dead] failed, so destroy til init[print]
+// if mut_id = nb_philo + 3 means init[meal] failed, so destroy til init[dead]
+int	destroy_mutex_id(t_phi *phi, pthread_mutex_t *forks, int mut_id)
+{
+	int	i;
+
+	i = 0;
+	if (mut_id <= (*phi).nb_philo + 1)
+	{
+		while (i < mut_id - 1)
+		{
+			if (destroy_a_mutex(&forks[i]) == KO)
+				return (KO);
+			i++;
+		}
+		return (KO);
+	}
+	if (mut_id == (*phi).nb_philo + 2)
+		return (destroy_a_mutex(&(*phi).m_print), destroy_mutex_id(phi, forks,
+				(*phi).nb_philo + 1));
+	if (mut_id == (*phi).nb_philo + 3)
+		return (destroy_a_mutex(&(*phi).m_dead), destroy_mutex_id(phi, forks,
+				(*phi).nb_philo + 2));
 	return (KO);
 }

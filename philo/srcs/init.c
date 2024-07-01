@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:13:26 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/01 06:11:33 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/01 21:00:45 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@ int	init_a_mutex(pthread_mutex_t *mutex)
 
 int	init_phi(t_phi *phi, t_philo *philos, pthread_mutex_t *forks, char **argv)
 {
+	int	mut_id;
+
+	mut_id = 0;
 	(*phi).philos = philos;
 	(*phi).forks = forks;
 	(*phi).nb_philo = ft_atoll(argv[1]);
@@ -29,30 +32,37 @@ int	init_phi(t_phi *phi, t_philo *philos, pthread_mutex_t *forks, char **argv)
 	else
 		(*phi).must_eat = -1;
 	(*phi).is_dead = 0;
-	init_forks(forks, (*phi).nb_philo);
-	if (init_a_mutex(&(*phi).m_print) == KO
-		|| init_a_mutex(&(*phi).m_dead) == KO
-		|| init_a_mutex(&(*phi).m_meal) == KO)
-		return (KO);
-	return (OK);
+	mut_id = init_forks((*phi).forks, (*phi).nb_philo);
+	if (mut_id != 0)
+		return (mut_id);
+	if (init_a_mutex(&(*phi).m_print) == KO)
+		return ((*phi).nb_philo + 1);
+	if (init_a_mutex(&(*phi).m_dead) == KO)
+		return ((*phi).nb_philo + 2);
+	if (init_a_mutex(&(*phi).m_meal) == KO)
+		return ((*phi).nb_philo + 3);	
+	return (0);
 }
 
+// in fail case, return id
+// 0 if no fail
 int	init_forks(pthread_mutex_t *forks, int nb_philo)
 {
 	int	i;
-	int	fail;
 
+	// int	fail;
+	// int mut_id;
 	i = 0;
-	fail = 0;
+	// fail = 0;
 	while (i < nb_philo)
 	{
 		if (init_a_mutex(&forks[i]) == KO)
-			fail++;
+			return (i + 1);
 		i++;
 	}
-	if (!fail)
-		return (OK);
-	return (KO);
+	// if (!fail)
+	return (0);
+	// return (KO);
 }
 
 // (*phi).philo[i] = (t_philo){0};

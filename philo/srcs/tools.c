@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 00:29:37 by caguillo          #+#    #+#             */
-/*   Updated: 2024/06/29 21:51:28 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/02 01:01:34 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,54 @@ int	is_space(char c)
 	return (0);
 }
 
-long long	ft_atoll(char *str)
+void	print_log(t_philo *philo, char *str)
 {
-	int			i;
-	int			sign;
-	long long	nbr;
+	if (is_dead(philo) == 0)
+	{
+		pthread_mutex_lock((*philo).m_print);
+		printf("%ld %d %s\n", gettime_ms() - (*philo).start, (*philo).id, str);
+		pthread_mutex_unlock((*philo).m_print);
+	}
+}
+
+// struct timeval {
+//     time_t      tv_sec;  // seconds since the Epoch
+//     suseconds_t tv_usec; // microseconds
+// };
+// int gettimeofday(struct timeval *tv, struct timezone *tz);
+// printf("%ld\n", t.tv_sec * 1000 + t.tv_usec / 1000);
+long	gettime_ms(void)
+{
+	struct timeval	t;
+
+	if (gettimeofday(&t, NULL) == -1)
+		perror("philo: gettimeofday");
+	return (t.tv_sec * 1000 + t.tv_usec / 1000);
+}
+
+void	ft_msleep(long ms)
+{
+	long	start;
+
+	start = gettime_ms();
+	while ((gettime_ms() - start) < ms)
+		usleep(500);
+}
+
+long long 	check_limit(int sign, unsigned long long nbr)
+{
+	if (nbr > LLONG_MAX - 1 && sign == -1)
+		return (LLONG_MIN);
+	if (nbr > LLONG_MAX && sign == 1)
+		return (LLONG_MAX);
+	return (sign * nbr);
+}
+
+long long ft_atoll(char *str)
+{
+	int					i;
+	int					sign;
+	unsigned long long	nbr;
 
 	if (!str)
 		return (0);
@@ -59,39 +102,5 @@ long long	ft_atoll(char *str)
 		nbr = nbr * 10 + (str[i] - 48);
 		i++;
 	}
-	return (sign * nbr);
-}
-
-void	print_log(t_philo *philo, char *str)
-{
-	if (is_dead(philo) == 0)
-	{
-		pthread_mutex_lock((*philo).m_print);	
-		printf("%ld %d %s\n", gettime_ms() - (*philo).start, (*philo).id, str);
-		pthread_mutex_unlock((*philo).m_print);	
-	}
-	
-}
-
-// struct timeval {
-//     time_t      tv_sec;  // seconds since the Epoch
-//     suseconds_t tv_usec; // microseconds
-// };
-// int gettimeofday(struct timeval *tv, struct timezone *tz);
-long	gettime_ms(void)
-{
-	struct timeval	t;
-
-	if (gettimeofday(&t, NULL) == -1)
-		perror("philo: gettimeofday");
-	return (t.tv_sec * 1000 + t.tv_usec / 1000);
-}
-
-void	ft_msleep(long ms)
-{
-	long	start;
-
-	start = gettime_ms();
-	while ((gettime_ms() - start) < ms)
-		usleep(500);
+	return (check_limit(sign, nbr));
 }
