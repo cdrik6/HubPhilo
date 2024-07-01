@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:13:26 by caguillo          #+#    #+#             */
-/*   Updated: 2024/06/30 03:54:54 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/01 06:11:33 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,19 @@ int	init_a_mutex(pthread_mutex_t *mutex)
 	return (OK);
 }
 
-int	init_phi(t_phi *phi, t_philo *philos, char **argv)
+int	init_phi(t_phi *phi, t_philo *philos, pthread_mutex_t *forks, char **argv)
 {
 	(*phi).philos = philos;
+	(*phi).forks = forks;
 	(*phi).nb_philo = ft_atoll(argv[1]);
 	if (argv[5])
 		(*phi).must_eat = ft_atoll(argv[5]);
 	else
 		(*phi).must_eat = -1;
 	(*phi).is_dead = 0;
-	if (init_a_mutex(&(*phi).m_print) == KO || init_a_mutex(&(*phi).m_dead) == KO
+	init_forks(forks, (*phi).nb_philo);
+	if (init_a_mutex(&(*phi).m_print) == KO
+		|| init_a_mutex(&(*phi).m_dead) == KO
 		|| init_a_mutex(&(*phi).m_meal) == KO)
 		return (KO);
 	return (OK);
@@ -65,6 +68,7 @@ void	init_philos(t_phi *phi, t_philo *philos, pthread_mutex_t *forks,
 		philos[i].id = i + 1;
 		philos[i].start = gettime_ms();
 		philos[i].last_meal = gettime_ms();
+		philos[i].nb_philo = ft_atoll(argv[1]);
 		philos[i].time_to_die = ft_atoll(argv[2]);
 		philos[i].time_to_eat = ft_atoll(argv[3]);
 		philos[i].time_to_sleep = ft_atoll(argv[4]);

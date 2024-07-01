@@ -6,36 +6,36 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:58:18 by caguillo          #+#    #+#             */
-/*   Updated: 2024/06/30 04:32:55 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/01 06:14:03 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/phi.h"
 
 // phi = (t_phi){0};
+// printf("%lld", ft_atoll(argv[2]));
+// if (create_thread(&phi) == OK)
 int	main(int argc, char **argv)
 {
 	t_phi			phi;
 	t_philo			philos[MAX_PHILO];
 	pthread_mutex_t	forks[MAX_PHILO];
-	int				nb_philo;
-
-	//printf("%lld", ft_atoll(argv[2]));
+	int				issue_id;
+	// int				nb_philo;
+	
 	if (check_args(argc, argv) == KO)
 		return (KO);
-	nb_philo = ft_atoll(argv[1]);
-	
-	if (init_phi(&phi, philos, argv) == OK && init_forks(forks, nb_philo) == OK)
+	issue_id = 1;
+	// nb_philo = ft_atoll(argv[1]);
+	// if (init_phi(&phi, philos, argv) == OK && init_forks(forks, nb_philo) == OK)
+	if (init_phi(&phi, philos, forks, argv) == OK)
 	{
 		init_philos(&phi, philos, forks, argv);
-		if (nb_philo == 1)
-			alone(&phi);
-		else if (create_thread(&phi) == OK)
-		{
+		issue_id = create_thread(&phi);
+		if (issue_id == 0)
 			monitor(&phi);
-			join_thread(&phi);
-		}
 	}
+	join_thread(&phi, issue_id);
 	destroy_mutex(&phi, forks);
 	return (OK);
 }
@@ -59,6 +59,8 @@ int	check_args(int argc, char **argv)
 	return (OK);
 }
 
+// if (nb_philo == 1)
+// 		alone(&phi);
 void	alone(t_phi *phi)
 {
 	print_log(&((*phi).philos[0]), FORKING);

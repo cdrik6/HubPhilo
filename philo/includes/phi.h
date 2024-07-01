@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:22:06 by caguillo          #+#    #+#             */
-/*   Updated: 2024/06/30 03:54:19 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/01 06:14:56 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct s_philo
 	int				id;
 	long			start;
 	long			last_meal;
+	int				nb_philo;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
@@ -64,7 +65,7 @@ typedef struct s_philo
 typedef struct s_phi
 {
 	t_philo			*philos;
-	// pthread_mutex_t	*forks;
+	pthread_mutex_t	*forks;
 	int				nb_philo;
 	int				must_eat;
 	int				is_dead;
@@ -79,10 +80,12 @@ void				alone(t_phi *phi);
 
 // init.c
 int					init_a_mutex(pthread_mutex_t *mutex);
-int					init_phi(t_phi *phi, t_philo *philo, char **argv);
+// int				init_phi(t_phi *phi, t_philo *philo, char **argv);
+int					init_phi(t_phi *phi, t_philo *philos,
+						pthread_mutex_t *forks, char **argv);
 int					init_forks(pthread_mutex_t *fork, int nb_philo);
 void				init_philos(t_phi *phi, t_philo *philo,
-						pthread_mutex_t *fork, char **av);
+						pthread_mutex_t *fork, char **argv);
 // void				init_input(t_philo *philo, char **argv);
 
 // tools.c
@@ -95,8 +98,8 @@ long				gettime_ms(void);
 
 // thread.c
 int					create_thread(t_phi *phi);
-int					join_thread(t_phi *phi);
-int					destroy_a_mutex(pthread_mutex_t mutex);
+int					join_thread(t_phi *phi, int issue_id);
+int					destroy_a_mutex(pthread_mutex_t *mutex);
 int					destroy_mutex(t_phi *phi, pthread_mutex_t *fork);
 
 // routine.c
