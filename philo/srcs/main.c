@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:58:18 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/02 00:38:32 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/03 01:17:03 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,24 @@
 // nb_philo = ft_atoll(argv[1]);
 // if (init_phi(&phi, philos, argv) == OK && init_forks(forks, nb_philo) == OK)
 // issue_id = 1;
+// t_philo			philos[MAX_PHILO];
+// pthread_mutex_t	forks[MAX_PHILO];
 int	main(int argc, char **argv)
 {
 	t_phi			phi;
-	t_philo			philos[MAX_PHILO];
-	pthread_mutex_t	forks[MAX_PHILO];
+	t_philo			*philos;
+	pthread_mutex_t	*forks;
 	int				issue_id;
 	int				mut_id;
 
 	if (check_args(argc, argv) == KO)
 		return (KO);
-	philos = malloc(sizeof(t_philo))	
-	
+	philos = malloc(ft_atoll(argv[1]) * sizeof(t_philo));
+	if (!philos)
+		return (KO);
+	forks = malloc(ft_atoll(argv[1]) * sizeof(pthread_mutex_t));
+	if (!forks)
+		return (free(philos), KO);
 	mut_id = init_phi(&phi, philos, forks, argv);
 	if (mut_id == 0)
 	{
@@ -39,10 +45,13 @@ int	main(int argc, char **argv)
 		if (issue_id == 0)
 			monitor(&phi);
 		join_thread(&phi, issue_id);
-		return (destroy_mutex(&phi, forks));
+		if (destroy_mutex(&phi, forks) == KO)
+			return (free_phi(philos, forks), KO);
+		return (free_phi(philos, forks), OK);
 	}
 	else
-		return (destroy_mutex_id(&phi, forks, mut_id));
+		return (destroy_mutex_id(&phi, forks, mut_id), free_phi(philos, forks),
+			KO);
 	return (OK);
 }
 
@@ -54,33 +63,34 @@ int	check_args(int argc, char **argv)
 		return (putstr_fd(MIN_NBP, 2), KO);
 	if (ft_atoll(argv[1]) > MAX_PHILO)
 		return (putstr_fd(MAX_NBP, 2), KO);
-	//	
+	//
 	if (ft_atoll(argv[2]) < 0)
-		return (putstr_fd(ERR_TTD, 2), KO);		
+		return (putstr_fd(ERR_TTD, 2), KO);
 	if (ft_atoll(argv[2]) > INT_MAX)
-		return (putstr_fd(ERR_TTD, 2), KO);			
-	//	
+		return (putstr_fd(ERR_TTD, 2), KO);
+	//
 	if (ft_atoll(argv[3]) < 0)
 		return (putstr_fd(ERR_TTE, 2), KO);
 	if (ft_atoll(argv[3]) > INT_MAX)
 		return (putstr_fd(ERR_TTE, 2), KO);
-	//		
+	//
 	if (ft_atoll(argv[4]) < 0)
 		return (putstr_fd(ERR_TTS, 2), KO);
 	if (ft_atoll(argv[4]) > INT_MAX)
-		return (putstr_fd(ERR_TTS, 2), KO);	
-	//	
+		return (putstr_fd(ERR_TTS, 2), KO);
+	//
 	if (argv[5] && ft_atoll(argv[5]) < 0)
 		return (putstr_fd(ERR_TME, 2), KO);
 	if (argv[5] && ft_atoll(argv[5]) > INT_MAX)
-		return (putstr_fd(ERR_TME, 2), KO);	
+		return (putstr_fd(ERR_TME, 2), KO);
 	return (OK);
 }
 
-
-
-
-
+void	free_phi(t_philo *philos, pthread_mutex_t *forks)
+{
+	free(philos);
+	free(forks);
+}
 
 // // if (nb_philo == 1)
 // // 		alone(&phi);

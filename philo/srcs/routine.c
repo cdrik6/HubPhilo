@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 20:32:11 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/01 04:30:25 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/03 00:36:53 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,24 @@ void	*routine(void *data)
 	}
 	else
 	{
+		// if ((*philo).id % 2 == 0 && (*philo).nb_philo != 3)
 		if ((*philo).id % 2 == 0)
 			ft_msleep(1);
+		// if ((*philo).id == (*philo).nb_philo)
+		// 	ft_msleep(1);
 		// if ((*philo).id % 3 == 0)
 		// 	ft_msleep((*philo).time_to_eat + 1);
 		while (is_dead(philo) == 0)
 		{
-			if ((*philo).id % 2 == 0)
-				eating_even(philo);
+			if ((*philo).nb_philo != 3)
+			{
+				if ((*philo).id % 2 == 0)
+					eating_even(philo);
+				else
+					eating_odd(philo);
+			}
 			else
-				eating_odd(philo);
+				eating_even(philo);
 			sleeping(philo);
 			thinking(philo);
 		}
@@ -117,7 +125,9 @@ void	thinking(t_philo *philo)
 	// {
 	print_log(philo, THINKING);
 	usleep(500);
-	// ft_msleep((*philo).time_to_eat - (*philo).time_to_sleep);
+	// if ((*philo).nb_philo == 3)
+	// 	// ft_msleep(119);
+	// 	ft_msleep((*philo).time_to_eat - (*philo).time_to_sleep);
 	//  }
 }
 

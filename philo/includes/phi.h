@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:22:06 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/02 00:31:42 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/03 01:06:31 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@
 	"Usage: ./philo number_of_philosophers time_to_die (ms) \
 	time_to_eat (ms) time_to_sleep (ms) \
 	[number_of_times_each_philosopher_must_eat]\n"
-# define MIN_NBP "philo: number of philosophers should be at least 1\n"
-# define MAX_NBP "philo: number of philosophers should be no more than 200\n"
-# define ERR_TTD "philo: time to die should be a positive number\n"
-# define ERR_TTE "philo: time to eat should be a positive number\n"
-# define ERR_TTS "philo: time to sleep should be a positive number\n"
-# define ERR_TME "philo: number_of_times_each_philosopher_must_eat should be positive\n"
+# define MIN_NBP "philo: invalid number_of_philosophers\n"
+# define MAX_NBP "philo: invalid number_of_philosophers\n"
+# define ERR_TTD "philo: invalid time_to_die\n"
+# define ERR_TTE "philo: invalid time_to_eat\n"
+# define ERR_TTS "philo: invalid time_to_sleep\n"
+# define ERR_TME "philo: invalid number_of_times_each_philosopher_must_eat\n"
 # define EATING "is eating"
 # define SLEEPING "is sleeping"
 # define THINKING "is thinking"
@@ -78,6 +78,7 @@ typedef struct s_phi
 // main.c
 int					check_args(int argc, char **argv);
 // void				alone(t_phi *phi);
+void	free_phi(t_philo *philos, pthread_mutex_t *forks);
 
 // init.c
 int					init_a_mutex(pthread_mutex_t *mutex);
@@ -97,6 +98,7 @@ void				print_log(t_philo *philo, char *str);
 long				gettime_ms(void);
 long long			ft_atoll(char *str);
 long long			check_limit(int sign, unsigned long long nbr);
+int ft_atoi(char *str);
 
 // thread.c
 int					create_thread(t_phi *phi);
