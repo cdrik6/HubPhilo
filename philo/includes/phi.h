@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:22:06 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/03 01:06:31 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/05 00:24:48 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@
 # define KO 1
 # define NBM 3
 # define ERR_ARG "philo: wrong number of arguments\n"
-# define USAGE \
-	"Usage: ./philo number_of_philosophers time_to_die (ms) \
+# define USAGE "Usage: ./philo number_of_philosophers time_to_die (ms) \
 	time_to_eat (ms) time_to_sleep (ms) \
 	[number_of_times_each_philosopher_must_eat]\n"
 # define MIN_NBP "philo: invalid number_of_philosophers\n"
@@ -41,6 +40,8 @@
 # define SLEEPING "is sleeping"
 # define THINKING "is thinking"
 # define FORKING "has taken a fork"
+# define FORKING_L "has taken a fork left"
+# define FORKING_R "has taken a fork right"
 # define DIED "died"
 
 typedef struct s_philo
@@ -76,29 +77,32 @@ typedef struct s_phi
 }					t_phi;
 
 // main.c
+// main
+int				philosopher(t_phi *phi, t_philo *philos,
+						pthread_mutex_t *forks, char **argv);
 int					check_args(int argc, char **argv);
-// void				alone(t_phi *phi);
-void	free_phi(t_philo *philos, pthread_mutex_t *forks);
+void				free_phi(t_philo *philos, pthread_mutex_t *forks);
 
 // init.c
 int					init_a_mutex(pthread_mutex_t *mutex);
-// int				init_phi(t_phi *phi, t_philo *philo, char **argv);
 int					init_phi(t_phi *phi, t_philo *philos,
 						pthread_mutex_t *forks, char **argv);
 int					init_forks(pthread_mutex_t *fork, int nb_philo);
 void				init_philos(t_phi *phi, t_philo *philo,
 						pthread_mutex_t *fork, char **argv);
-// void				init_input(t_philo *philo, char **argv);
 
 // tools.c
+long				gettime_ms(void);
+void				print_log(t_philo *philo, char *str);
+void				ft_msleep(long ms);
+void				eating_alone(t_philo *philo);
+
+// utils.c
 void				putstr_fd(char *str, int fd);
 int					is_space(char c);
-void				ft_msleep(long ms);
-void				print_log(t_philo *philo, char *str);
-long				gettime_ms(void);
 long long			ft_atoll(char *str);
 long long			check_limit(int sign, unsigned long long nbr);
-int ft_atoi(char *str);
+void				*ft_calloc(size_t nb_elem, size_t size_elem);
 
 // thread.c
 int					create_thread(t_phi *phi);
@@ -121,5 +125,11 @@ int					is_all_over(t_phi *phi);
 void				monitor(t_phi *phi);
 int					is_to_die(t_philo *philo);
 int					is_dead(t_philo *philo);
+
+// draft
+// int ft_atoi(char *str);
+// void				init_input(t_philo *philo, char **argv);
+// int				init_phi(t_phi *phi, t_philo *philo, char **argv);
+// void				alone(t_phi *phi);
 
 #endif

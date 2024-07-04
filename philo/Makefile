@@ -6,7 +6,7 @@
 #    By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/25 23:32:02 by caguillo          #+#    #+#              #
-#    Updated: 2024/07/03 01:07:36 by caguillo         ###   ########.fr        #
+#    Updated: 2024/07/04 22:55:02 by caguillo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ SRCS		=	srcs/main.c \
 				srcs/thread.c \
 				srcs/routine.c \
 				srcs/monitor.c \
-				srcs/tools.c
+				srcs/tools.c \
+				srcs/utils.c
 
 INCS_SRCS	=	./includes/phi.h
 				

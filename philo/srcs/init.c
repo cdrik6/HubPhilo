@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:13:26 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/01 21:00:45 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/05 01:02:16 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	init_a_mutex(pthread_mutex_t *mutex)
 {
-	if (pthread_mutex_init(&(*mutex), NULL) != 0)
+	if (pthread_mutex_init(mutex, NULL) != 0)
 		return (perror("philo: pthread_mutex_init"), KO);
 	return (OK);
 }
@@ -40,29 +40,24 @@ int	init_phi(t_phi *phi, t_philo *philos, pthread_mutex_t *forks, char **argv)
 	if (init_a_mutex(&(*phi).m_dead) == KO)
 		return ((*phi).nb_philo + 2);
 	if (init_a_mutex(&(*phi).m_meal) == KO)
-		return ((*phi).nb_philo + 3);	
+		return ((*phi).nb_philo + 3);
 	return (0);
 }
 
-// in fail case, return id
+// in fail case, return philo id
 // 0 if no fail
 int	init_forks(pthread_mutex_t *forks, int nb_philo)
 {
 	int	i;
 
-	// int	fail;
-	// int mut_id;
 	i = 0;
-	// fail = 0;
 	while (i < nb_philo)
 	{
 		if (init_a_mutex(&forks[i]) == KO)
 			return (i + 1);
 		i++;
 	}
-	// if (!fail)
 	return (0);
-	// return (KO);
 }
 
 // (*phi).philo[i] = (t_philo){0};

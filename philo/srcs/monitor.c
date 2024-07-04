@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 22:59:31 by caguillo          #+#    #+#             */
-/*   Updated: 2024/06/30 04:35:04 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/05 01:05:39 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,16 +59,17 @@ void	monitor(t_phi *phi)
 	{
 		if (is_a_dead(phi) == 1 || is_all_over(phi) == 1)
 			break ;
+		// usleep(500);
 	}
 }
 
 // && (*philo).eating == 0
+// printf("%d", (gettime_ms() - (*philo).last_meal) > (*philo).time_to_die);
 int	is_to_die(t_philo *philo)
 {
 	pthread_mutex_lock((*philo).m_meal);
 	if ((gettime_ms() - (*philo).last_meal) > (*philo).time_to_die)
 	{
-		//printf("%d", (gettime_ms() - (*philo).last_meal) > (*philo).time_to_die);
 		pthread_mutex_unlock((*philo).m_meal);
 		return (1);
 	}
@@ -87,14 +88,3 @@ int	is_dead(t_philo *philo)
 	pthread_mutex_unlock((*philo).m_dead);
 	return (0);
 }
-
-// int		ready;
-// ready = 0;
-// while (ready != (*phi).nb_philo + 1)
-// {
-// 	usleep(100);
-// 	pthread_mutex_lock(&((*phi).philo[0].mutex));
-// 	ready = (*phi).ready;
-// 	pthread_mutex_unlock(&((*phi).philo[0].mutex));
-// 	// printf("%d\n", ready);
-// }
