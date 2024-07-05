@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 20:32:11 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/05 00:51:44 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/05 18:46:36 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,35 +23,34 @@ void	*routine(void *data)
 	else
 	{
 		if ((*philo).id % 2 == 0)
-			ft_msleep(1);
-		if ((*philo).id == (*philo).nb_philo)
-			usleep(500);				
+			usleep(500);
+			//ft_msleep(1);
 		while (is_dead(philo) == 0)
 		{
-			// if ((*philo).nb_philo != 3)
-			// {
-				if ((*philo).id % 2 == 0 || (*philo).id == (*philo).nb_philo)
+			if ((*philo).nb_philo != 3)
+			{
+				if ((*philo).id % 2 == 0)
 					eating_even(philo);
 				else
 					eating_odd(philo);
-			// }
-			// else
-			// {
-			// 	usleep(500);
-			// 	eating_odd(philo);
-			// }
+			}
+			else
+				eating_odd(philo);
 			sleeping(philo);
 			thinking(philo);
 		}
 	}
 	return (data);
 }
+// if ((*philo).id == (*philo).nb_philo)
+// 	usleep(500);
+// usleep(500);
 // if ((*philo).id % 2 == 0 && (*philo).nb_philo != 3)
-
+// if ((*philo).id % 2 == 0 || (*philo).id == (*philo).nb_philo)
 // if ((*philo).id % 3 == 0)
 // 	ft_msleep((*philo).time_to_eat + 1);
 
-void	eating_even(t_philo *philo)
+void	eating_odd(t_philo *philo)
 {
 	pthread_mutex_lock((*philo).left_fork);
 	print_log(philo, FORKING_L);
@@ -69,7 +68,7 @@ void	eating_even(t_philo *philo)
 	pthread_mutex_unlock((*philo).left_fork);
 }
 
-void	eating_odd(t_philo *philo)
+void	eating_even(t_philo *philo)
 {
 	pthread_mutex_lock((*philo).right_fork);
 	print_log(philo, FORKING_R);
