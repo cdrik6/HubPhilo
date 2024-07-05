@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:58:18 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/05 18:03:40 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/05 23:10:57 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	main(int argc, char **argv)
 	forks = ft_calloc(ft_atoll(argv[1]), sizeof(pthread_mutex_t));
 	if (!forks)
 		return (free(philos), KO);
+	// phi = (t_phi){0};	
 	mut_id = init_phi(&phi, philos, forks, argv);
 	if (mut_id == 0)
 		return(philosopher(&phi, philos, forks, argv));

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:22:06 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/05 00:24:48 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/06 00:44:30 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@
 # define KO 1
 # define NBM 3
 # define ERR_ARG "philo: wrong number of arguments\n"
-# define USAGE "Usage: ./philo number_of_philosophers time_to_die (ms) \
+# define USAGE \
+	"Usage: ./philo number_of_philosophers time_to_die (ms) \
 	time_to_eat (ms) time_to_sleep (ms) \
 	[number_of_times_each_philosopher_must_eat]\n"
 # define MIN_NBP "philo: invalid number_of_philosophers\n"
@@ -55,7 +56,7 @@ typedef struct s_philo
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				nb_meal;
-	int				eating;
+	//int				eating;
 	int				*dead;
 	pthread_mutex_t	*right_fork;
 	pthread_mutex_t	*left_fork;
@@ -71,6 +72,7 @@ typedef struct s_phi
 	int				nb_philo;
 	int				must_eat;
 	int				is_dead;
+	// int				ready;
 	pthread_mutex_t	m_print;
 	pthread_mutex_t	m_dead;
 	pthread_mutex_t	m_meal;
@@ -78,7 +80,7 @@ typedef struct s_phi
 
 // main.c
 // main
-int				philosopher(t_phi *phi, t_philo *philos,
+int					philosopher(t_phi *phi, t_philo *philos,
 						pthread_mutex_t *forks, char **argv);
 int					check_args(int argc, char **argv);
 void				free_phi(t_philo *philos, pthread_mutex_t *forks);

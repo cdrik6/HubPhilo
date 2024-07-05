@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:58:12 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/01 22:44:08 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/05 23:37:35 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,12 @@ int	create_thread(t_phi *phi)
 		if (pthread_create(&((*phi).philos[i].thread), NULL, &routine,
 				&((*phi).philos[i])) != 0)
 			return (perror("philo: pthread_create"), i + 1);
+		// else
+		// {
+		// 	pthread_mutex_lock(&((*phi).m_dead));
+		// 	((*phi).ready)++;
+		// 	pthread_mutex_unlock(&((*phi).m_dead));
+		// }		
 		i++;
 	}
 	return (0);
