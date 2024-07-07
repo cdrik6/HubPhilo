@@ -1,26 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:58:18 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/07 04:16:41 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/07 04:28:02 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philo.h"
+#include "../includes/philo_bonus.h"
 
-// phi = (t_phi){0};
-// printf("%lld", ft_atoll(argv[2]));
-// if (create_thread(&phi) == OK)
-// int				nb_philo;
-// nb_philo = ft_atoll(argv[1]);
-// if (init_phi(&phi, philos, argv) == OK && init_forks(forks, nb_philo) == OK)
-// issue_id = 1;
-// t_philo			philos[MAX_PHILO];
-// pthread_mutex_t	forks[MAX_PHILO];
 int	main(int argc, char **argv)
 {
 	t_phi			phi;
