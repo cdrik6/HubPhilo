@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:58:18 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/07 04:28:02 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/08 04:18:48 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,45 +14,44 @@
 
 int	main(int argc, char **argv)
 {
-	t_phi			phi;
-	t_philo			*philos;
-	pthread_mutex_t	*forks;
-	int				mut_id;
+	t_phi	phi;
+	t_philo	*philos;
+	int		mut_id;
 
 	if (check_args(argc, argv) == KO)
 		return (KO);
+	printf("sizeof(t_philo) = %d\n", sizeof(t_philo));
 	philos = ft_calloc(ft_atoll(argv[1]), sizeof(t_philo));
 	if (!philos)
 		return (KO);
-	forks = ft_calloc(ft_atoll(argv[1]), sizeof(pthread_mutex_t));
-	if (!forks)
-		return (free(philos), KO);
-	// phi = (t_phi){0};	
-	mut_id = init_phi(&phi, philos, forks, argv);
-	if (mut_id == 0)
-		return(philosopher(&phi, philos, forks, argv));
-	else
+	// phi = (t_phi){0};
+	if (init_phi(&phi, philos, argv) == OK)
 	{
-		destroy_mutex_id(&phi, forks, mut_id);
-		return (free_phi(philos, forks), KO);
+		init_philos(&phi);	
+		//monitor(&phi);
+		return (free(philos), OK);
 	}
-	return (OK);
+	else
+		return (free(philos), KO);
 }
 
-int	philosopher(t_phi *phi, t_philo *philos, pthread_mutex_t *forks,
-		char **argv)
+// 
+int	wait_dead(t_pipex pipex)
 {
-	int	issue_id;
+	int	exitcode;
 
-	init_philos(phi, philos, forks, argv);
-	issue_id = create_thread(phi);
-	if (issue_id == 0)
-		monitor(phi);
-	join_thread(phi, issue_id);
-	if (destroy_mutex(phi, forks) == KO)
-		return (free_phi(philos, forks), KO);
-	return (free_phi(philos, forks), OK);
+	exitcode = 0;
+	while (errno != ECHILD)
+	{
+		if (wait(&pipex.status) == pipex.pid)
+		{
+			if (WIFEXITED(pipex.status))
+				exitcode = WEXITSTATUS(pipex.status);
+		}
+	}
+	return (exitcode);
 }
+
 
 int	check_args(int argc, char **argv)
 {

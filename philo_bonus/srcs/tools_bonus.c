@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 00:29:37 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/07 04:22:16 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/08 02:33:19 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,13 @@ void	ft_msleep(long ms)
 		usleep(500);
 }
 
-void	print_log(t_philo *philo, char *str)
+void	print_log(t_phi *phi, t_philo *philo, char *str)
 {
 	if (is_dead(philo) == 0)
 	{
-		pthread_mutex_lock((*philo).m_print);
+		sem_wait((*phi).s_print);
 		printf("%ld %d %s\n", gettime_ms() - (*philo).start, (*philo).id, str);
-		pthread_mutex_unlock((*philo).m_print);
+		sem_post((*phi).s_print);
 	}
 }
 

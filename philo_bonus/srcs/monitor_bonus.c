@@ -6,11 +6,13 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 22:59:31 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/07 04:22:01 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/08 04:11:27 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo_bonus.h"
+
+int	is_to_die(t_phi *phi, t_philo *philo)
 
 int	is_a_dead(t_phi *phi)
 {
@@ -19,7 +21,7 @@ int	is_a_dead(t_phi *phi)
 	i = 0;
 	while (i < (*phi).nb_philo)
 	{
-		if (is_to_die(&((*phi).philos[i])) == 1)
+		if (is_to_die(phi, &((*phi).philos[i])) == 1)
 		{
 			print_log(&((*phi).philos[i]), DIED);
 			pthread_mutex_lock(&((*phi).m_dead));
@@ -56,7 +58,6 @@ int	is_all_over(t_phi *phi)
 void	monitor(t_phi *phi)
 {
 	// int	ready;
-
 	// ready = 0;
 	// while (ready != (*phi).nb_philo)
 	// {
@@ -70,32 +71,31 @@ void	monitor(t_phi *phi)
 	{
 		if (is_a_dead(phi) == 1 || is_all_over(phi) == 1)
 			break ;
-		//usleep(10);
+		// usleep(10);
 	}
 }
 
-// && (*philo).eating == 0
 // printf("%d", (gettime_ms() - (*philo).last_meal) > (*philo).time_to_die);
-int	is_to_die(t_philo *philo)
+int	is_to_die(t_phi *phi, t_philo *philo)
 {
-	pthread_mutex_lock((*philo).m_meal);
-	if ((gettime_ms() - (*philo).last_meal) > (*philo).time_to_die)
+	sem_wait((*phi).s_meal);
+	if ((gettime_ms() - (*philo).last_meal) > (*phi).time_to_die)
 	{
-		pthread_mutex_unlock((*philo).m_meal);
+		sem_post((*phi).s_meal);
 		return (1);
 	}
-	pthread_mutex_unlock((*philo).m_meal);
+	sem_post((*phi).s_meal);
 	return (0);
 }
 
-int	is_dead(t_philo *philo)
+int	is_dead(t_phi *phi, t_philo *philo)
 {
-	pthread_mutex_lock((*philo).m_dead);
+	sem_wait((*phi).s_dead);
 	if (*((*philo).dead) == 1)
 	{
-		pthread_mutex_unlock((*philo).m_dead);
+		sem_post((*phi).s_dead);
 		return (1);
 	}
-	pthread_mutex_unlock((*philo).m_dead);
+	sem_post((*phi).s_dead);
 	return (0);
 }
