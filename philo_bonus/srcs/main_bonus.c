@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:58:18 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/08 04:18:48 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/09 05:33:44 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,43 +15,45 @@
 int	main(int argc, char **argv)
 {
 	t_phi	phi;
-	t_philo	*philos;
-	int		mut_id;
+	t_philo	*philos;	
 
 	if (check_args(argc, argv) == KO)
 		return (KO);
-	printf("sizeof(t_philo) = %d\n", sizeof(t_philo));
+	// printf("sizeof(t_philo) = %ld\n", sizeof(t_philo));
 	philos = ft_calloc(ft_atoll(argv[1]), sizeof(t_philo));
 	if (!philos)
 		return (KO);
 	// phi = (t_phi){0};
 	if (init_phi(&phi, philos, argv) == OK)
 	{
-		init_philos(&phi);	
-		//monitor(&phi);
-		return (free(philos), OK);
+		init_philos(&phi);
+		monitor(&phi);
+		if (wait_dead() == OK)
+			return (free(philos), OK);
 	}
 	else
 		return (free(philos), KO);
 }
 
-// 
-int	wait_dead(t_pipex pipex)
+//
+int	wait_dead(void)
 {
-	int	exitcode;
+	int	status;
 
-	exitcode = 0;
-	while (errno != ECHILD)
+	while (1)
 	{
-		if (wait(&pipex.status) == pipex.pid)
-		{
-			if (WIFEXITED(pipex.status))
-				exitcode = WEXITSTATUS(pipex.status);
-		}
+		if (waitpid(-1, &status, 0) != -1)
+			return (OK);
 	}
-	return (exitcode);
+	// if (WIFEXITED(status))
+	// {
+	// 	if (WEXITSTATUS(status) == OK)
+	// 	{
+	// 		return (OK);
+	// 	}
+	// }
+	return (KO);
 }
-
 
 int	check_args(int argc, char **argv)
 {
@@ -80,11 +82,11 @@ int	check_args(int argc, char **argv)
 	return (OK);
 }
 
-void	free_phi(t_philo *philos, pthread_mutex_t *forks)
-{
-	free(philos);
-	free(forks);
-}
+// void	free_phi(t_philo *philos, pthread_mutex_t *forks)
+// {
+// 	free(philos);
+// 	free(forks);
+// }
 
 // // if (nb_philo == 1)
 // // 		alone(&phi);

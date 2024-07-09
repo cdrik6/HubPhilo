@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:13:26 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/08 04:00:46 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/09 05:33:50 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,19 @@ int	init_philos(t_phi *phi)
 		(*phi).philos[i].last_meal = gettime_ms();
 		(*phi).philos[i].nb_meal = 0;
 		(*phi).philos[i].dead = &(*phi).is_dead;
+		// (*phi).philos[i].dead = 0;
 		if (pid == -1)
 			return (perror("fork"), KO);
 		if (pid == 0)
 		{
-			routine(phi, &((*phi).philos[i]));
+			routine(phi, &(*phi).philos[i]);
+			// if (is_to_die(phi, &(*phi).philos[i]) == 1)
+			// {
+			// 	print_log(phi, &((*phi).philos[i]), DIED);
+			// }
 		}
 		(*phi).philos[i].pid = pid;
 		i++;
 	}
+	return (OK);
 }

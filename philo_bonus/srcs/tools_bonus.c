@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 00:29:37 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/08 02:33:19 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/09 04:57:40 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	ft_msleep(long ms)
 
 void	print_log(t_phi *phi, t_philo *philo, char *str)
 {
-	if (is_dead(philo) == 0)
+	if (is_dead(phi, philo) == 0)
 	{
 		sem_wait((*phi).s_print);
 		printf("%ld %d %s\n", gettime_ms() - (*philo).start, (*philo).id, str);
@@ -46,11 +46,11 @@ void	print_log(t_phi *phi, t_philo *philo, char *str)
 	}
 }
 
-void	eating_alone(t_philo *philo)
-{
-	pthread_mutex_lock((*philo).right_fork);
-	print_log(philo, FORKING);
-	pthread_mutex_unlock((*philo).right_fork);
-}
-// ft_msleep((*philo).time_to_die);
-// print_log(philo, DIED);
+// void	eating_alone(t_philo *philo)
+// {
+// 	pthread_mutex_lock((*philo).right_fork);
+// 	print_log(philo, FORKING);
+// 	pthread_mutex_unlock((*philo).right_fork);
+// }
+// // ft_msleep((*philo).time_to_die);
+// // print_log(philo, DIED);

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:22:06 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/08 03:59:36 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/09 05:11:53 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ typedef struct s_philo
 	time_t	last_meal;
 	int		nb_meal;
 	int		*dead;
-	// int		nb_philo;	
+	// int		nb_philo;
 	// pthread_mutex_t	*right_fork;
 	// pthread_mutex_t	*left_fork;
 	// pthread_mutex_t	*m_print;
@@ -89,6 +89,7 @@ typedef struct s_phi
 // pthread_mutex_t *forks,				char **argv);
 int			check_args(int argc, char **argv);
 // void		free_phi(t_philo *philos, pthread_mutex_t *forks);
+int			wait_dead(void);
 
 // init.c
 int			init_phi(t_phi *phi, t_philo *philos, char **argv);
@@ -123,16 +124,17 @@ void		routine(t_phi *phi, t_philo *philo);
 void		eating(t_phi *phi, t_philo *philo);
 void		sleeping(t_phi *phi, t_philo *philo);
 void		thinking(t_phi *phi, t_philo *philo);
+int			is_dead(t_phi *phi, t_philo *philo);
 // void		eating_even(t_philo *philo);
 // void		eating_odd(t_philo *philo);
 // void		sleeping(t_philo *philo);
 // void		thinking(t_philo *philo);
 
-// // monitor.c
-// int			is_a_dead(t_phi *phi);
+// monitor.c
+int			is_a_dead(t_phi *phi);
 // int			is_all_over(t_phi *phi);
-// void		monitor(t_phi *phi);
-// int			is_to_die(t_philo *philo);
-// int			is_dead(t_philo *philo);
+void		monitor(t_phi *phi);
+int			is_to_die(t_phi *phi, t_philo *philo);
+int			is_dead(t_phi *phi, t_philo *philo);
 
 #endif
