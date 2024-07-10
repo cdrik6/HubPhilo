@@ -6,31 +6,31 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 22:59:31 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/09 05:07:39 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/10 03:55:32 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo_bonus.h"
 
-int	is_a_dead(t_phi *phi)
-{
-	int	i;
+// int	is_a_dead(t_phi *phi)
+// {
+// 	int	i;
 
-	i = 0;
-	while (i < (*phi).nb_philo)
-	{
-		if (is_to_die(phi, &((*phi).philos[i])) == 1)
-		{
-			print_log(phi, &((*phi).philos[i]), DIED);
-			sem_wait((*phi).s_dead);
-			*((*phi).philos[i].dead) = 1;
-			sem_post((*phi).s_dead);
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
+// 	i = 0;
+// 	while (i < (*phi).nb_philo)
+// 	{
+// 		if (is_to_die(phi, &((*phi).philos[i])) == 1)
+// 		{
+// 			print_log(phi, &((*phi).philos[i]), DIED);
+// 			sem_wait((*phi).s_dead);
+// 			*((*phi).philos[i].dead) = 1;
+// 			sem_post((*phi).s_dead);
+// 			return (1);
+// 		}
+// 		i++;
+// 	}
+// 	return (0);
+// }
 
 // int	is_all_over(t_phi *phi)
 // {
@@ -53,48 +53,60 @@ int	is_a_dead(t_phi *phi)
 // 	return (1);
 // }
 
-void	monitor(t_phi *phi)
+void	*monitor(void *data)
 {
-	// int	ready;
-	// ready = 0;
-	// while (ready != (*phi).nb_philo)
-	// {
-	// 	usleep(100);
-	// 	pthread_mutex_lock(&((*phi).m_dead));
-	// 	ready = (*phi).ready;
-	// 	pthread_mutex_unlock(&((*phi).m_dead));
-	// 	//printf("%d\n", ready);
-	// }
+	t_philo	*philo;
+
+	philo = (t_philo *)data;
 	while (1)
 	{
 		// if (is_a_dead(phi) == 1 || is_all_over(phi) == 1)
-		if (is_a_dead(phi) == 1)
+		if (is_to_die(philo) == 1)
+		{
+			// printf("dead: id = %d\n", (*philo).id);
+			sem_wait(*((*philo).s_dead));
+			(*philo).dead = 1;
+			sem_post(*((*philo).s_dead));
 			break ;
+		}
 		// usleep(10);
 	}
+	// free((*phi).philos);
+	sem_close(*((*philo).s_forks));
+	sem_close(*((*philo).s_print));
+	sem_close(*((*philo).s_meal));
+	sem_close(*((*philo).s_dead));
+	// sem_unlink(S_FORKS);
+	// sem_unlink(S_PRINT);
+	// sem_unlink(S_DEAD);
+	// sem_unlink(S_MEAL);
+	exit((*philo).pid);
+	// kill((*philo).pid, SIGKILL);
+	return (data);
 }
 
 // printf("%d", (gettime_ms() - (*philo).last_meal) > (*philo).time_to_die);
-int	is_to_die(t_phi *phi, t_philo *philo)
+int	is_to_die(t_philo *philo)
 {
-	sem_wait((*phi).s_meal);
-	if ((gettime_ms() - (*philo).last_meal) > (*phi).time_to_die)
+	sem_wait(*((*philo).s_meal));
+	if ((gettime_ms() - (*philo).last_meal) > (*philo).time_to_die)
 	{
-		sem_post((*phi).s_meal);
+		// sem_post(*((*philo).s_meal));
+		print_log(philo, DIED);
 		return (1);
 	}
-	sem_post((*phi).s_meal);
+	sem_post(*((*philo).s_meal));
 	return (0);
 }
 
-int	is_dead(t_phi *phi, t_philo *philo)
+int	is_dead(t_philo *philo)
 {
-	sem_wait((*phi).s_dead);
-	if (*((*philo).dead) == 1)
+	sem_wait(*(*philo).s_dead);
+	if ((*philo).dead == 1)
 	{
-		sem_post((*phi).s_dead);
+		sem_post(*(*philo).s_dead);
 		return (1);
 	}
-	sem_post((*phi).s_dead);
+	sem_post(*(*philo).s_dead);
 	return (0);
 }

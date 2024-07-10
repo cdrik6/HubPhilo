@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:13:26 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/09 05:33:50 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/10 03:55:03 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ int	init_phi(t_phi *phi, t_philo *philos, char **argv)
 		(*phi).must_eat = ft_atoll(argv[5]);
 	else
 		(*phi).must_eat = -1;
-	(*phi).is_dead = 0;
+	// (*phi).is_dead = 0;
+	// (*phi).start = gettime_ms();
 	return (init_sem(phi));
 }
 
@@ -50,7 +51,8 @@ int	init_sem(t_phi *phi)
 }
 
 // (*phi).philo[i] = (t_philo){0};
-int	init_philos(t_phi *phi)
+// le parent recoit le pid de l'enfant
+int	create_philos(t_phi *phi)
 {
 	int		i;
 	pid_t	pid;
@@ -59,24 +61,41 @@ int	init_philos(t_phi *phi)
 	while (i < (*phi).nb_philo)
 	{
 		pid = fork();
-		(*phi).philos[i].id = i + 1;
-		(*phi).philos[i].start = gettime_ms();
-		(*phi).philos[i].last_meal = gettime_ms();
-		(*phi).philos[i].nb_meal = 0;
-		(*phi).philos[i].dead = &(*phi).is_dead;
-		// (*phi).philos[i].dead = 0;
+		init_philo(phi, pid, i);
 		if (pid == -1)
-			return (perror("fork"), KO);
+			return (perror("philo: fork"), KO);
 		if (pid == 0)
 		{
+			create_thread(&(*phi).philos[i]);
 			routine(phi, &(*phi).philos[i]);
 			// if (is_to_die(phi, &(*phi).philos[i]) == 1)
 			// {
 			// 	print_log(phi, &((*phi).philos[i]), DIED);
 			// }
+			free((*phi).philos);
 		}
-		(*phi).philos[i].pid = pid;
+		
 		i++;
 	}
 	return (OK);
+}
+
+void	init_philo(t_phi *phi, pid_t pid, int i)
+{
+	(*phi).philos[i].pid = pid;
+	(*phi).philos[i].id = i + 1;
+	(*phi).philos[i].start = gettime_ms();
+	(*phi).philos[i].last_meal = gettime_ms();
+	(*phi).philos[i].nb_meal = 0;
+	(*phi).philos[i].nb_philo = (*phi).nb_philo;
+	(*phi).philos[i].time_to_die = (*phi).time_to_die;
+	(*phi).philos[i].time_to_eat = (*phi).time_to_eat;
+	(*phi).philos[i].time_to_sleep = (*phi).time_to_sleep;
+	(*phi).philos[i].must_eat = (*phi).must_eat;
+	(*phi).philos[i].s_forks = &(*phi).s_forks;
+	(*phi).philos[i].s_print = &(*phi).s_print;
+	(*phi).philos[i].s_dead = &(*phi).s_dead;
+	(*phi).philos[i].s_meal = &(*phi).s_meal;
+	(*phi).philos[i].dead = 0;
+	// (*phi).philos[i].dead = &(*phi).is_dead;	
 }

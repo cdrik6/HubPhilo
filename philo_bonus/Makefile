@@ -6,7 +6,7 @@
 #    By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/25 23:32:02 by caguillo          #+#    #+#              #
-#    Updated: 2024/07/09 05:11:12 by caguillo         ###   ########.fr        #
+#    Updated: 2024/07/10 00:46:38 by caguillo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ SRCS		=	srcs/main_bonus.c \
 				srcs/init_bonus.c \
 				srcs/routine_bonus.c \
 				srcs/monitor_bonus.c \
+				srcs/thread_bonus.c \
 				srcs/tools_bonus.c \
 				srcs/utils_bonus.c
 

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 20:32:11 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/09 04:54:00 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/10 02:50:30 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,12 @@ void	routine(t_phi *phi, t_philo *philo)
 	// 	eating_alone(philo);
 	// else
 	// {
-	while (is_dead(phi, philo) == 0)
+	// while (is_dead(philo) == 0)
+	while (1)
 	{
 		eating(phi, philo);
 		sleeping(phi, philo);
-		thinking(phi, philo);
+		thinking(philo);
 	}
 	// }
 	// printf("sizeof(t_philo) = %ld\n", sizeof(t_philo));
@@ -30,17 +31,18 @@ void	routine(t_phi *phi, t_philo *philo)
 	// printf("id = %d\n", (*philo).id);
 	// sem_post((*phi).s_print);
 	// print_log(phi, philo, DIED);
-	free((*phi).philos);
-	exit(OK);
+	// free((*phi).philos);
+	// exit((*philo).pid);
+	// exit(OK);
 }
 
 void	eating(t_phi *phi, t_philo *philo)
 {
 	sem_wait((*phi).s_forks);
-	print_log(phi, philo, FORKING);
+	print_log(philo, FORKING);
 	sem_wait((*phi).s_forks);
-	print_log(phi, philo, FORKING);
-	print_log(phi, philo, EATING);
+	print_log(philo, FORKING);
+	print_log(philo, EATING);
 	sem_wait((*phi).s_meal);
 	(*philo).nb_meal++;
 	(*philo).last_meal = gettime_ms();
@@ -52,15 +54,21 @@ void	eating(t_phi *phi, t_philo *philo)
 
 void	sleeping(t_phi *phi, t_philo *philo)
 {
-	print_log(phi, philo, SLEEPING);
-	ft_msleep((*phi).time_to_sleep);
+	// if (is_dead(philo) == 0)
+	// {
+		print_log(philo, SLEEPING);
+		ft_msleep((*phi).time_to_sleep);
+	// }
 }
 
-void	thinking(t_phi *phi, t_philo *philo)
+void	thinking(t_philo *philo)
 {
-	print_log(phi, philo, THINKING);
-	// ft_msleep((*phi).time_to_eat - (*phi).time_to_sleep + 1);
-	// ft_msleep(1);
+	// if (is_dead(philo) == 0)
+	// {
+		print_log(philo, THINKING);
+	// }
+	ft_msleep((*philo).time_to_eat - (*philo).time_to_sleep + 1);
+	//ft_msleep(1);
 }
 
 // int	is_dead(t_phi *phi, t_philo *philo)
