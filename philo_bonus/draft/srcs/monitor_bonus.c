@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 22:59:31 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/11 02:41:23 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/10 03:55:32 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,11 @@
 // 	return (1);
 // }
 
-// void	monitor(t_phi *phi, t_philo *philo, pthread_t *threads)
-// void	monitor(t_phi *phi, t_philo *philo)
-void	monitor(t_philo *philo)
+void	*monitor(void *data)
 {
-	// pid_t pid;
+	t_philo	*philo;
 
-	// pid = (*philo).pid;
+	philo = (t_philo *)data;
 	while (1)
 	{
 		// if (is_a_dead(phi) == 1 || is_all_over(phi) == 1)
@@ -72,9 +70,8 @@ void	monitor(t_philo *philo)
 			break ;
 		}
 		// usleep(10);
-	}	
-	// // 
-	// // pthread_join((*philo).thread, NULL);
+	}
+	// free((*phi).philos);
 	sem_close(*((*philo).s_forks));
 	sem_close(*((*philo).s_print));
 	sem_close(*((*philo).s_meal));
@@ -83,12 +80,9 @@ void	monitor(t_philo *philo)
 	// sem_unlink(S_PRINT);
 	// sem_unlink(S_DEAD);
 	// sem_unlink(S_MEAL);
-	// // pthread_detach((*philo).thread);	
-	// free((*phi).philos);
-	// pthread_detach(threads[(*philo).id - 1]);
-	// free(threads);
-	// exit(pid);
-	// // kill((*philo).pid, SIGKILL);	
+	exit((*philo).pid);
+	// kill((*philo).pid, SIGKILL);
+	return (data);
 }
 
 // printf("%d", (gettime_ms() - (*philo).last_meal) > (*philo).time_to_die);

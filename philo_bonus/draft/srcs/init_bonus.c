@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:13:26 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/11 03:08:57 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/10 03:55:03 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,7 @@ int	create_philos(t_phi *phi)
 {
 	int		i;
 	pid_t	pid;
-	// pthread_t *threads;
 
-	
-	// threads = ft_calloc((*phi).nb_philo, sizeof(pthread_t));
-	// if (!threads)
-	// 	return (KO);
 	i = 0;
 	while (i < (*phi).nb_philo)
 	{
@@ -72,21 +67,16 @@ int	create_philos(t_phi *phi)
 		if (pid == 0)
 		{
 			create_thread(&(*phi).philos[i]);
-			monitor(&(*phi).philos[i]);
-			//pthread_join((*phi).philos[i].thread, NULL);
-			pthread_detach((*phi).philos[i].thread);
+			routine(phi, &(*phi).philos[i]);
 			// if (is_to_die(phi, &(*phi).philos[i]) == 1)
 			// {
 			// 	print_log(phi, &((*phi).philos[i]), DIED);
 			// }
-			// free((*phi).philos);
-			// free((*phi).philos);
-			return(KO);
+			free((*phi).philos);
 		}
 		
 		i++;
 	}
-	//free(threads);
 	return (OK);
 }
 

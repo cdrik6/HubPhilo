@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:58:18 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/11 03:09:31 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/10 03:45:40 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,28 +15,19 @@
 int	main(int argc, char **argv)
 {
 	t_phi	phi;
-	t_philo	*philos;
+	t_philo	*philo;
 
 	if (check_args(argc, argv) == KO)
 		return (KO);
 	// printf("sizeof(t_philo) = %ld\n", sizeof(t_philo));
 	// pid = ft_calloc(ft_atoll(argv[1]), sizeof(pid_t));
-	philos = ft_calloc(ft_atoll(argv[1]), sizeof(t_philo));
-	if (!philos)
+	philo = ft_calloc(ft_atoll(argv[1]), sizeof(t_philo));
+	if (!philo)
 		return (KO);
 	// phi = (t_phi){0};
-	if (init_phi(&phi, philos, argv) == OK)
+	if (init_phi(&phi, philo, argv) == OK)
 	{
-		if (create_philos(&phi) == KO)
-		{
-		int i = 0;
-		while (i < phi.nb_philo)
-		{
-			printf("kill %d = %d\n", i, kill(phi.philos[i].pid, SIGKILL));
-			//kill(phi.philos[i].pid, SIGKILL);		
-			i++;
-		}		
-		}
+		create_philos(&phi);
 		if (wait_dead(phi) == OK)
 		{
 			sem_close(phi.s_forks);
@@ -47,11 +38,11 @@ int	main(int argc, char **argv)
 			sem_unlink(S_PRINT);
 			sem_unlink(S_DEAD);
 			sem_unlink(S_MEAL);
-			return (free(philos), OK);
+			return (free(philo), OK);
 		}
 	}
 	else
-		return (free(philos), KO);
+		return (free(philo), KO);
 }
 
 //

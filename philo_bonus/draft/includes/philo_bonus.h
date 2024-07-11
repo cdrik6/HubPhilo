@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:22:06 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/11 02:33:32 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/10 03:54:43 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,6 @@ void			*ft_calloc(size_t nb_elem, size_t size_elem);
 
 // thread.c
 int				create_thread(t_philo *philo);
-// int	create_thread(t_philo *philo, pthread_t *thread);
 // int			create_thread(t_phi *phi);
 // int			join_thread(t_phi *phi, int issue_id);
 // int			destroy_a_mutex(pthread_mutex_t *mutex);
@@ -134,10 +133,9 @@ int				create_thread(t_philo *philo);
 // pthread_mutex_t *forks, int mut_id);
 
 // routine.c
-// void			routine(t_phi *phi, t_philo *philo);
-void			*routine(void *data);
-void			eating(t_philo *philo);
-void			sleeping(t_philo *philo);
+void			routine(t_phi *phi, t_philo *philo);
+void			eating(t_phi *phi, t_philo *philo);
+void			sleeping(t_phi *phi, t_philo *philo);
 void			thinking(t_philo *philo);
 // int				is_dead(t_phi *phi, t_philo *philo);
 // void		eating_even(t_philo *philo);
@@ -146,10 +144,7 @@ void			thinking(t_philo *philo);
 // void		thinking(t_philo *philo);
 
 // monitor.c
-
-// void			monitor(t_phi *phi, t_philo *philo);
-// void	monitor(t_phi *phi, t_philo *philo, pthread_t *threads);
-void			monitor(t_philo *philo);
+void			*monitor(void *data);
 int				is_to_die(t_philo *philo);
 // int				is_a_dead(t_phi *phi);
 // int			is_all_over(t_phi *phi);

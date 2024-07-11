@@ -6,28 +6,22 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:58:12 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/11 02:57:26 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/10 02:15:54 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo_bonus.h"
 
 //******** exit to be managed ***********************/
-//int	create_thread(t_philo *philo, pthread_t *thread)
 int	create_thread(t_philo *philo)
 {
-	// pthread_t thread;
-
-	// thread
-	// if (pthread_create(thread, NULL, &routine, philo) != 0)
-	if (pthread_create(&(*philo).thread, NULL, &routine, philo) != 0)	
+	if (pthread_create(&(*philo).thread, NULL, &monitor, philo) != 0)
 	{
 		perror("philo: pthread_create");
 		exit(KO);
-	}	
-	// // if (pthread_join((*philo).thread, NULL) != 0)
+	}
+	// if (pthread_join((*philo).thread, NULL) != 0)
 	if (pthread_detach((*philo).thread) != 0)
-	// if (pthread_detach(*thread) != 0)
 	{
 		perror("philo: pthread_detach");
 		exit(KO);
@@ -121,4 +115,3 @@ int	create_thread(t_philo *philo)
 // 				(*phi).nb_philo + 2));
 // 	return (KO);
 // }
-
