@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:58:18 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/12 01:28:53 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/11 23:36:26 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	main(int argc, char **argv)
 {
 	t_phi	phi;
 	t_philo	*philos;
-	int		i;
+	
 
 	if (check_args(argc, argv) == KO)
 		return (KO);
@@ -26,18 +26,11 @@ int	main(int argc, char **argv)
 	if (!philos)
 		return (KO);
 	// phi = (t_phi){0};
-	if (init_phi(&phi, philos, argv) == OK)
+	if (init_phi(&phi, philos, argv) == OK )
 	{
-		if (create_philos(&phi) == KO)
-		{
-			i = 0;
-			while (i < phi.nb_philo)
-			{
-				printf("kill %d = %d\n", i, kill(phi.philos[i].pid, SIGKILL));
-				// kill(phi.philos[i].pid, SIGKILL);
-				i++;
-			}
-		}
+		
+		create_philos(&phi);
+		create_thread(&phi);
 		if (wait_dead(phi) == OK)
 		{
 			sem_close(phi.s_forks);
@@ -48,8 +41,10 @@ int	main(int argc, char **argv)
 			sem_unlink(S_PRINT);
 			sem_unlink(S_DEAD);
 			sem_unlink(S_MEAL);
-			return (free(philos), OK);
-		}
+			//free(philos);
+		}		
+		pthread_join(phi.thread, NULL);
+		return (OK);
 	}
 	else
 		return (free(philos), KO);
@@ -72,9 +67,8 @@ int	wait_dead(t_phi phi)
 				printf("kill %d = %d\n", i, kill(phi.philos[i].pid, SIGKILL));
 				i++;
 			}
-			return (OK);
 		}
-		
+		return (OK);
 	}
 	// if (WIFEXITED(status))
 	// {
