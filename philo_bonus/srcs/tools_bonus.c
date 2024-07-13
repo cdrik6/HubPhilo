@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 00:29:37 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/13 05:30:15 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/13 23:51:52 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,16 @@ void	ft_msleep(long ms)
 	while ((gettime_ms() - start) < ms)
 		usleep(500);
 }
+
+void	isdead_msleep(long ms)
+{
+	long	start;
+
+	start = gettime_ms();
+	while ((gettime_ms() - start) < ms)
+		usleep(500);
+}
+
 
 void	print_log(t_philo *philo, char *str)
 {
