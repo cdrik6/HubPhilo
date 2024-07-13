@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:13:26 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/12 04:36:33 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/13 04:04:22 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int	init_sem(t_phi *phi)
 	sem_unlink(S_PRINT);
 	sem_unlink(S_DEAD);
 	sem_unlink(S_MEAL);
+	sem_unlink(S_STOP);	
 	(*phi).s_forks = sem_open(S_FORKS, O_CREAT | O_EXCL, 0600, (*phi).nb_philo);
 	if ((*phi).s_forks == SEM_FAILED)
 		return (perror("sem_open forks"), KO);
@@ -47,51 +48,50 @@ int	init_sem(t_phi *phi)
 	(*phi).s_meal = sem_open(S_MEAL, O_CREAT | O_EXCL, 0600, 1);
 	if ((*phi).s_meal == SEM_FAILED)
 		return (perror("sem_open meal"), KO);
+	//
+	(*phi).s_stop = sem_open(S_STOP, O_CREAT | O_EXCL, 0600, 1);
+	if ((*phi).s_stop == SEM_FAILED)
+		return (perror("sem_open stop"), KO);
+	//
 	return (OK);
 }
 
-// (*phi).philo[i] = (t_philo){0};
+//*************** on perror pour i,  free des children avant i   *******/
 // le parent recoit le pid de l'enfant
 int	create_philos(t_phi *phi)
 {
 	int		i;
 	pid_t	pid;
 
-	// pthread_t *threads;
-	// threads = ft_calloc((*phi).nb_philo, sizeof(pthread_t));
-	// if (!threads)
-	// 	return (KO);
 	i = 0;
 	while (i < (*phi).nb_philo)
 	{
 		pid = fork();
+		// printf("pid = %d\n", pid);
 		init_philo(phi, pid, i);
 		if (pid == -1)
 			return (perror("philo: fork"), KO);
 		if (pid == 0)
 		{
-			create_thread(&(*phi).philos[i]);			
-			monitor(&(*phi).philos[i]);
-			printf("id = %d\n", i+1);
+			create_thread(&(*phi).philos[i]);
+			routine(phi, &(*phi).philos[i]);
 			pthread_join((*phi).philos[i].thread, NULL);
-			//printf("join id = %d\n", i+1);
-			// pthread_detach((*phi).philos[i].thread);
-			// if (is_to_die(phi, &(*phi).philos[i]) == 1)
-			// {
-			// 	print_log(phi, &((*phi).philos[i]), DIED);
-			// }
-			// free((*phi).philos);
+			//
 			sem_close((*phi).s_forks);
 			sem_close((*phi).s_print);
 			sem_close((*phi).s_meal);
 			sem_close((*phi).s_dead);
-			free((*phi).philos);// exit((*phi).philos[i].pid);
+			sem_close((*phi).s_stop);
+			// sem_unlink(S_FORKS);
+			// sem_unlink(S_PRINT);
+			// sem_unlink(S_DEAD);
+			// sem_unlink(S_MEAL);
+			free((*phi).philos);
+			// //exit((*phi).philos[i].pid);
 			exit(0);
-			
 		}
 		i++;
 	}
-	// free(threads);
 	return (OK);
 }
 
@@ -111,6 +111,8 @@ void	init_philo(t_phi *phi, pid_t pid, int i)
 	(*phi).philos[i].s_print = &(*phi).s_print;
 	(*phi).philos[i].s_dead = &(*phi).s_dead;
 	(*phi).philos[i].s_meal = &(*phi).s_meal;
+	(*phi).philos[i].s_stop = &(*phi).s_stop;
 	(*phi).philos[i].dead = 0;
 	// (*phi).philos[i].dead = &(*phi).is_dead;
+	// printf("la\n");
 }

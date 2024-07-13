@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:22:06 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/12 01:29:46 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/13 03:59:55 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@
 # define S_PRINT "/s_print"
 # define S_DEAD "/s_dead"
 # define S_MEAL "/s_meal"
+# define S_STOP "/s_stop"
 
 typedef struct s_philo
 {
@@ -72,25 +73,29 @@ typedef struct s_philo
 	sem_t		**s_print;
 	sem_t		**s_dead;
 	sem_t		**s_meal;
+	sem_t		**s_stop;
 }				t_philo;
 
 // pid_t	*phi_pid;
 // time_t = unsigned long
 typedef struct s_phi
 {
-	t_philo		*philos;
-	sem_t		*s_forks;
+	t_philo		*philos;	
+	//
+	// pthread_t	thread;
 	//
 	int			nb_philo;
 	time_t		time_to_die;
 	time_t		time_to_eat;
 	time_t		time_to_sleep;
 	int			must_eat;
-	// int			is_dead;
+	//int			is_dead;
 	//
+	sem_t		*s_forks;
 	sem_t		*s_print;
 	sem_t		*s_dead;
 	sem_t		*s_meal;
+	sem_t		*s_stop;
 	// pid_t *pid;
 }				t_phi;
 
@@ -124,8 +129,7 @@ void			*ft_calloc(size_t nb_elem, size_t size_elem);
 
 // thread.c
 int				create_thread(t_philo *philo);
-// int	create_thread(t_philo *philo, pthread_t *thread);
-// int			create_thread(t_phi *phi);
+//int			create_thread(t_phi *phi);
 // int			join_thread(t_phi *phi, int issue_id);
 // int			destroy_a_mutex(pthread_mutex_t *mutex);
 // int			destroy_mutex(t_phi *phi,
@@ -134,10 +138,9 @@ int				create_thread(t_philo *philo);
 // pthread_mutex_t *forks, int mut_id);
 
 // routine.c
-// void			routine(t_phi *phi, t_philo *philo);
-void			*routine(void *data);
-void			eating(t_philo *philo);
-void			sleeping(t_philo *philo);
+void			routine(t_phi *phi, t_philo *philo);
+void			eating(t_phi *phi, t_philo *philo);
+void			sleeping(t_phi *phi, t_philo *philo);
 void			thinking(t_philo *philo);
 // int				is_dead(t_phi *phi, t_philo *philo);
 // void		eating_even(t_philo *philo);
@@ -146,10 +149,7 @@ void			thinking(t_philo *philo);
 // void		thinking(t_philo *philo);
 
 // monitor.c
-
-// void			monitor(t_phi *phi, t_philo *philo);
-// void	monitor(t_phi *phi, t_philo *philo, pthread_t *threads);
-void			monitor(t_philo *philo);
+void			*monitor(void *data);
 int				is_to_die(t_philo *philo);
 // int				is_a_dead(t_phi *phi);
 // int			is_all_over(t_phi *phi);
