@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 22:59:31 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/13 23:41:00 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/14 04:33:41 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	*monitor(void *data)
 			// sem_post(*(*philo).s_dead);
 			// sem_post(*(*philo).s_stop);
 			i = 0;
-			while (i < (*philo).nb_philo / 2)
+			while (i < 1 + (*philo).nb_philo / 2)
 			{
 				sem_post(*(*philo).s_forks);
 				i++;
@@ -92,10 +92,10 @@ int	is_to_die(t_philo *philo)
 	if ((gettime_ms() - (*philo).last_meal) > (*philo).time_to_die)
 	{
 		sem_post(*((*philo).s_meal));
-		print_log(philo, DIED);
-		// sem_wait(*((*philo).s_print));
-		// printf("%ld %d %s\n", gettime_ms() - (*philo).start, (*philo).id, DIED);
-		// sem_post(*((*philo).s_print));
+		// print_log(philo, DIED);
+		sem_wait(*((*philo).s_print));
+		printf("%ld %d %s\n", gettime_ms() - (*philo).start, (*philo).id, DIED);
+		sem_post(*((*philo).s_print));
 		sem_wait(*(*philo).s_dead);
 		(*philo).dead = 1;
 		sem_post(*(*philo).s_dead);

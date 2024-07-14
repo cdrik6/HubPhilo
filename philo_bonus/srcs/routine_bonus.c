@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 20:32:11 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/13 22:59:32 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/14 04:16:19 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,10 @@ void	routine(t_phi *phi, t_philo *philo)
 	// {
 	// while (1)
 	if ((*philo).id % 2 == 0)
-		ft_msleep((*phi).time_to_eat);
+		dead_msleep((*phi).time_to_eat, philo);
+		//ft_msleep(1);
 	while (is_dead(philo) == 0)
-	{
-		// sem_wait((*phi).s_print);
-		// printf("dead %d = %d\n", (*philo).id, *(*phi).philos[(*philo).id	//
-		//		- 1].dead);
-		// sem_post((*phi).s_print);
+	{		
 		eating(phi, philo);
 		sleeping(phi, philo);
 		thinking(philo);
@@ -36,21 +33,25 @@ void	routine(t_phi *phi, t_philo *philo)
 void	eating(t_phi *phi, t_philo *philo)
 {
 	sem_wait((*phi).s_forks);
-	print_log(philo, FORKING);
 	if (is_dead(philo) == 0)
 	{
-		sem_wait((*phi).s_forks);
 		print_log(philo, FORKING);
-		print_log(philo, EATING);
-		sem_wait((*phi).s_meal);
-		(*philo).nb_meal++;
-		(*philo).last_meal = gettime_ms();
-		sem_post((*phi).s_meal);
-		ft_msleep((*phi).time_to_eat);
-		sem_post((*phi).s_forks);
+		if (is_dead(philo) == 0)
+			sem_wait((*phi).s_forks);
+		if (is_dead(philo) == 0)
+			print_log(philo, FORKING);
+		if (is_dead(philo) == 0)
+		{
+			print_log(philo, EATING);
+			sem_wait((*phi).s_meal);
+			(*philo).nb_meal++;
+			(*philo).last_meal = gettime_ms();
+			sem_post((*phi).s_meal);
+			dead_msleep((*phi).time_to_eat, philo);
+			sem_post((*phi).s_forks);
+		}
 	}
 	sem_post((*phi).s_forks);
-	
 }
 
 void	sleeping(t_phi *phi, t_philo *philo)
@@ -58,7 +59,7 @@ void	sleeping(t_phi *phi, t_philo *philo)
 	if (is_dead(philo) == 0)
 	{
 		print_log(philo, SLEEPING);
-		ft_msleep((*phi).time_to_sleep);
+		dead_msleep((*phi).time_to_sleep, philo);
 	}
 }
 
@@ -67,7 +68,7 @@ void	thinking(t_philo *philo)
 	if (is_dead(philo) == 0)
 	{
 		print_log(philo, THINKING);
-		ft_msleep((*philo).time_to_eat - (*philo).time_to_sleep + 1);
+		dead_msleep((*philo).time_to_eat - (*philo).time_to_sleep + 1, philo);
 	}
 	// ft_msleep(1);
 }

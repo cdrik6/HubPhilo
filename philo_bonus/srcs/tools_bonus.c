@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 00:29:37 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/13 23:51:52 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/14 04:42:04 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ void	ft_msleep(long ms)
 		usleep(500);
 }
 
-void	isdead_msleep(long ms)
+void	dead_msleep(long ms, t_philo *philo)
 {
 	long	start;
 
 	start = gettime_ms();
-	while ((gettime_ms() - start) < ms)
+	while ((gettime_ms() - start) < ms && is_dead(philo) == 0)
 		usleep(500);
 }
 
@@ -52,9 +52,9 @@ void	print_log(t_philo *philo, char *str)
 	if (is_dead(philo) == 0)
 	{
 		sem_wait(*(*philo).s_stop);
-		sem_wait(*((*philo).s_print));
+		//sem_wait(*((*philo).s_print));
 		printf("%ld %d %s\n", gettime_ms() - (*philo).start, (*philo).id, str);
-		sem_post(*((*philo).s_print));
+		//sem_post(*((*philo).s_print));
 		sem_post(*(*philo).s_stop);
 	}
 	

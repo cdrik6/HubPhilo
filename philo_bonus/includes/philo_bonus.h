@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:22:06 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/13 03:59:55 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/14 03:55:53 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ void			init_philo(t_phi *phi, pid_t pid, int i);
 long			gettime_ms(void);
 void			print_log(t_philo *philo, char *str);
 void			ft_msleep(long ms);
+void	dead_msleep(long ms, t_philo *philo);
 // void		eating_alone(t_philo *philo);
 
 // utils.c
