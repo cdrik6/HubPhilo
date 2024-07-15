@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 20:32:11 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/14 04:16:19 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/15 05:00:39 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,12 @@ void	routine(t_phi *phi, t_philo *philo)
 	// {
 	// while (1)
 	if ((*philo).id % 2 == 0)
-		dead_msleep((*phi).time_to_eat, philo);
-		//ft_msleep(1);
+		dead_msleep((*phi).time_to_eat + 1, philo);
+	// ft_msleep(10);
+	if ((*philo).nb_philo % 2 == 1 && (*philo).id == (*philo).nb_philo)
+		dead_msleep((*phi).time_to_eat + 1, philo);
 	while (is_dead(philo) == 0)
-	{		
+	{
 		eating(phi, philo);
 		sleeping(phi, philo);
 		thinking(philo);
@@ -32,22 +34,32 @@ void	routine(t_phi *phi, t_philo *philo)
 
 void	eating(t_phi *phi, t_philo *philo)
 {
+	// printf("%d ici 1\n", (*philo).id);
 	sem_wait((*phi).s_forks);
+	// usleep(500);
 	if (is_dead(philo) == 0)
 	{
+		// printf("%d ici 2\n", (*philo).id);
+		/*****bloque ici**** */
 		print_log(philo, FORKING);
+		// printf("%d ici 3\n", (*philo).id);
 		if (is_dead(philo) == 0)
 			sem_wait((*phi).s_forks);
+		// printf("%d ici 4\n", (*philo).id);
 		if (is_dead(philo) == 0)
 			print_log(philo, FORKING);
+		// printf("%d ici 5\n", (*philo).id);
 		if (is_dead(philo) == 0)
 		{
 			print_log(philo, EATING);
+			// printf("%d ici 6\n", (*philo).id);
 			sem_wait((*phi).s_meal);
 			(*philo).nb_meal++;
 			(*philo).last_meal = gettime_ms();
 			sem_post((*phi).s_meal);
+			// printf("%d ici 7\n", (*philo).id);
 			dead_msleep((*phi).time_to_eat, philo);
+			// printf("%d ici 8\n", (*philo).id);
 			sem_post((*phi).s_forks);
 		}
 	}
@@ -68,9 +80,16 @@ void	thinking(t_philo *philo)
 	if (is_dead(philo) == 0)
 	{
 		print_log(philo, THINKING);
-		dead_msleep((*philo).time_to_eat - (*philo).time_to_sleep + 1, philo);
+		// if ((*philo).nb_philo % 2 == 1 )
+		// 	dead_msleep((*philo).time_to_eat + 1, philo);
+		// else
+		// 	dead_msleep((*philo).time_to_eat - (*philo).time_to_sleep					+ 1,			philo);
+		// 	// ft_msleep(10);
+		if ((*philo).time_to_eat - (*philo).time_to_sleep > 0)
+			dead_msleep((*philo).time_to_eat - (*philo).time_to_sleep + 1, philo);
+		else
+			dead_msleep(1, philo);
 	}
-	// ft_msleep(1);
 }
 
 // int	is_dead(t_phi *phi, t_philo *philo)

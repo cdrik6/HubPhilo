@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 22:59:31 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/14 04:33:41 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/15 04:41:33 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,17 +65,26 @@ void	*monitor(void *data)
 		sem_wait(*(*philo).s_stop);
 		if (is_to_die(philo) == 1)
 		{
+			
+			// exit(0);
+			//kill((*philo).pid,	SIGKILL);
+			// sem_wait(*((*philo).s_print));
+			// printf("%ld %d %s\n", gettime_ms() - (*philo).start, (*philo).id, DIED);
+			// sem_post(*((*philo).s_print));
 			// printf("dead: id = %d\n", (*philo).id);
 			// sem_wait(*(*philo).s_dead);
 			// (*philo).dead = 1;
 			// sem_post(*(*philo).s_dead);
 			// sem_post(*(*philo).s_stop);
-			i = 0;
-			while (i < 1 + (*philo).nb_philo / 2)
+			// sem_post(*(*philo).s_forks);
+			i = 0; //i++;
+			// // // while (i < (1+ (*philo).nb_philo) / 2)
+			while (i < (*philo).nb_philo)
 			{
 				sem_post(*(*philo).s_forks);
 				i++;
 			}
+			//printf("%d ici\n", (*philo).id);			
 			// sem_post(*(*philo).s_stop);
 			break ;
 		}
@@ -91,14 +100,18 @@ int	is_to_die(t_philo *philo)
 	sem_wait(*((*philo).s_meal));
 	if ((gettime_ms() - (*philo).last_meal) > (*philo).time_to_die)
 	{
+		sem_wait(*(*philo).s_dead);
+		(*philo).dead = 1;
+		sem_post(*(*philo).s_dead);
+		
 		sem_post(*((*philo).s_meal));
+		//
 		// print_log(philo, DIED);
 		sem_wait(*((*philo).s_print));
 		printf("%ld %d %s\n", gettime_ms() - (*philo).start, (*philo).id, DIED);
 		sem_post(*((*philo).s_print));
-		sem_wait(*(*philo).s_dead);
-		(*philo).dead = 1;
-		sem_post(*(*philo).s_dead);
+		//		
+				
 		return (1);
 	}
 	sem_post(*((*philo).s_meal));

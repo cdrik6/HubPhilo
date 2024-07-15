@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:22:06 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/14 03:55:53 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/14 15:30:34 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ typedef struct s_phi
 	time_t		time_to_sleep;
 	int			must_eat;
 	//int			is_dead;
+	time_t		start;
 	//
 	sem_t		*s_forks;
 	sem_t		*s_print;

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:13:26 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/13 04:04:22 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/14 15:32:30 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	init_phi(t_phi *phi, t_philo *philos, char **argv)
 	else
 		(*phi).must_eat = -1;
 	// (*phi).is_dead = 0;
-	// (*phi).start = gettime_ms();
+	(*phi).start = gettime_ms();
 	return (init_sem(phi));
 }
 
@@ -99,7 +99,8 @@ void	init_philo(t_phi *phi, pid_t pid, int i)
 {
 	(*phi).philos[i].pid = pid;
 	(*phi).philos[i].id = i + 1;
-	(*phi).philos[i].start = gettime_ms();
+	//(*phi).philos[i].start = gettime_ms();
+	(*phi).philos[i].start = (*phi).start;
 	(*phi).philos[i].last_meal = gettime_ms();
 	(*phi).philos[i].nb_meal = 0;
 	(*phi).philos[i].nb_philo = (*phi).nb_philo;
