@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 00:29:37 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/14 21:42:41 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/15 22:46:48 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,11 @@ void	print_log(t_philo *philo, char *str)
 	
 	if (is_dead(philo) == 0)
 	{
-		sem_wait(*(*philo).s_stop);
+		// sem_wait(*(*philo).s_stop);
 		sem_wait(*((*philo).s_print));
 		printf("%ld %d %s\n", gettime_ms() - (*philo).start, (*philo).id, str);
 		sem_post(*((*philo).s_print));
-		sem_post(*(*philo).s_stop);
+		// sem_post(*(*philo).s_stop);
 	}
 	
 }

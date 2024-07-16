@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:13:26 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/14 15:32:30 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/16 00:21:29 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	init_sem(t_phi *phi)
 	sem_unlink(S_PRINT);
 	sem_unlink(S_DEAD);
 	sem_unlink(S_MEAL);
-	sem_unlink(S_STOP);	
+	sem_unlink(S_STOP);
 	(*phi).s_forks = sem_open(S_FORKS, O_CREAT | O_EXCL, 0600, (*phi).nb_philo);
 	if ((*phi).s_forks == SEM_FAILED)
 		return (perror("sem_open forks"), KO);
@@ -49,7 +49,7 @@ int	init_sem(t_phi *phi)
 	if ((*phi).s_meal == SEM_FAILED)
 		return (perror("sem_open meal"), KO);
 	//
-	(*phi).s_stop = sem_open(S_STOP, O_CREAT | O_EXCL, 0600, 1);
+	(*phi).s_stop = sem_open(S_STOP, O_CREAT | O_EXCL, 0600, 0);
 	if ((*phi).s_stop == SEM_FAILED)
 		return (perror("sem_open stop"), KO);
 	//
@@ -92,6 +92,7 @@ int	create_philos(t_phi *phi)
 		}
 		i++;
 	}
+	is_a_dead(phi);
 	return (OK);
 }
 
@@ -116,4 +117,19 @@ void	init_philo(t_phi *phi, pid_t pid, int i)
 	(*phi).philos[i].dead = 0;
 	// (*phi).philos[i].dead = &(*phi).is_dead;
 	// printf("la\n");
+}
+
+void	is_a_dead(t_phi *phi)
+{
+	int	i;
+
+	sem_wait((*phi).s_stop);
+	i = 0;
+	while (i < (*phi).nb_philo)
+	{
+		kill((*phi).philos[i].pid, SIGKILL);
+		i++;
+	}
+	sem_post((*phi).s_stop);
+	// return (OK);
 }

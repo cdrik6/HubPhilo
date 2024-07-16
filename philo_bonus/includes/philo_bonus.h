@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:22:06 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/14 15:30:34 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/15 22:43:34 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ typedef struct s_philo
 // time_t = unsigned long
 typedef struct s_phi
 {
-	t_philo		*philos;	
+	t_philo		*philos;
 	//
 	// pthread_t	thread;
 	//
@@ -89,7 +89,7 @@ typedef struct s_phi
 	time_t		time_to_eat;
 	time_t		time_to_sleep;
 	int			must_eat;
-	//int			is_dead;
+	// int			is_dead;
 	time_t		start;
 	//
 	sem_t		*s_forks;
@@ -114,12 +114,13 @@ int				init_sem(t_phi *phi);
 int				create_philos(t_phi *phi);
 void			init_philo(t_phi *phi, pid_t pid, int i);
 // int			init_forks(pthread_mutex_t *fork, int nb_philo);
+void			is_a_dead(t_phi *phi);
 
 // tools.c
 long			gettime_ms(void);
 void			print_log(t_philo *philo, char *str);
 void			ft_msleep(long ms);
-void	dead_msleep(long ms, t_philo *philo);
+void			dead_msleep(long ms, t_philo *philo);
 // void		eating_alone(t_philo *philo);
 
 // utils.c
@@ -131,7 +132,7 @@ void			*ft_calloc(size_t nb_elem, size_t size_elem);
 
 // thread.c
 int				create_thread(t_philo *philo);
-//int			create_thread(t_phi *phi);
+// int			create_thread(t_phi *phi);
 // int			join_thread(t_phi *phi, int issue_id);
 // int			destroy_a_mutex(pthread_mutex_t *mutex);
 // int			destroy_mutex(t_phi *phi,
