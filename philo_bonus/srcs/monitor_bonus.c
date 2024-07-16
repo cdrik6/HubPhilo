@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 22:59:31 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/15 22:53:04 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/16 04:58:41 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,40 +56,40 @@
 void	*monitor(void *data)
 {
 	t_philo	*philo;
-	//int		i;
+	int		i;
 
 	philo = (t_philo *)data;
 	while (1)
 	{
 		// if (is_a_dead(phi) == 1 || is_all_over(phi) == 1)
-		//sem_wait(*(*philo).s_stop);
+		sem_wait(*(*philo).s_stop);
 		if (is_to_die(philo) == 1)
 		{
 			
-			// // exit(0);
-			// //kill((*philo).pid,	SIGKILL);
-			// // sem_wait(*((*philo).s_print));
-			// // printf("%ld %d %s\n", gettime_ms() - (*philo).start, (*philo).id, DIED);
-			// // sem_post(*((*philo).s_print));
-			// // printf("dead: id = %d\n", (*philo).id);
-			// // sem_wait(*(*philo).s_dead);
-			// // (*philo).dead = 1;
-			// // sem_post(*(*philo).s_dead);
-			// // sem_post(*(*philo).s_stop);
-			// // sem_post(*(*philo).s_forks);
-			// i = 0; //i++;
-			// // // // while (i < (1+ (*philo).nb_philo) / 2)
-			// while (i < (*philo).nb_philo)
-			// {
-			// 	sem_post(*(*philo).s_forks);
-			// 	i++;
-			// }
-			// //printf("%d ici\n", (*philo).id);			
-			// // sem_post(*(*philo).s_stop);
-			sem_post(*(*philo).s_stop);
+			// exit(0);
+			//kill((*philo).pid,	SIGKILL);
+			// sem_wait(*((*philo).s_print));
+			// printf("%ld %d %s\n", gettime_ms() - (*philo).start, (*philo).id, DIED);
+			// sem_post(*((*philo).s_print));
+			// printf("dead: id = %d\n", (*philo).id);
+			// sem_wait(*(*philo).s_dead);
+			// (*philo).dead = 1;
+			// sem_post(*(*philo).s_dead);
+			// sem_post(*(*philo).s_stop);
+			// sem_post(*(*philo).s_forks);
+			i = 0; //i++;
+			// // // while (i < (1+ (*philo).nb_philo) / 2)
+			while (i < (*philo).nb_philo)
+			{
+				sem_post(*(*philo).s_forks);
+				i++;
+			}
+			//printf("%d ici\n", (*philo).id);			
+			// sem_post(*(*philo).s_stop);
+			// sem_post(*(*philo).s_stop);
 			break ;
 		}
-		// sem_post(*(*philo).s_stop);
+		sem_post(*(*philo).s_stop);
 		// usleep(100);
 	}
 	return (data);
@@ -110,9 +110,9 @@ int	is_to_die(t_philo *philo)
 		// print_log(philo, DIED);		
 		sem_wait(*((*philo).s_print));
 		printf("%ld %d %s\n", gettime_ms() - (*philo).start, (*philo).id, DIED);
-		//sem_post(*((*philo).s_print));
+		sem_post(*((*philo).s_print));
 		//		
-		//sem_post(*(*philo).s_stop);		
+		// sem_post(*(*philo).s_stop);		
 		return (1);
 	}
 	sem_post(*((*philo).s_meal));

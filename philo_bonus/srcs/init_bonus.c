@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:13:26 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/16 00:21:29 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/16 04:58:23 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,20 +36,20 @@ int	init_sem(t_phi *phi)
 	sem_unlink(S_DEAD);
 	sem_unlink(S_MEAL);
 	sem_unlink(S_STOP);
-	(*phi).s_forks = sem_open(S_FORKS, O_CREAT | O_EXCL, 0600, (*phi).nb_philo);
+	(*phi).s_forks = sem_open(S_FORKS, O_CREAT | O_EXCL, 0644, (*phi).nb_philo);
 	if ((*phi).s_forks == SEM_FAILED)
 		return (perror("sem_open forks"), KO);
-	(*phi).s_print = sem_open(S_PRINT, O_CREAT | O_EXCL, 0600, 1);
+	(*phi).s_print = sem_open(S_PRINT, O_CREAT | O_EXCL, 0644, 1);
 	if ((*phi).s_print == SEM_FAILED)
 		return (perror("sem_open print"), KO);
-	(*phi).s_dead = sem_open(S_DEAD, O_CREAT | O_EXCL, 0600, 1);
+	(*phi).s_dead = sem_open(S_DEAD, O_CREAT | O_EXCL, 0644, 1);
 	if ((*phi).s_dead == SEM_FAILED)
 		return (perror("sem_open dead"), KO);
-	(*phi).s_meal = sem_open(S_MEAL, O_CREAT | O_EXCL, 0600, 1);
+	(*phi).s_meal = sem_open(S_MEAL, O_CREAT | O_EXCL, 0644, 1);
 	if ((*phi).s_meal == SEM_FAILED)
 		return (perror("sem_open meal"), KO);
 	//
-	(*phi).s_stop = sem_open(S_STOP, O_CREAT | O_EXCL, 0600, 0);
+	(*phi).s_stop = sem_open(S_STOP, O_CREAT | O_EXCL, 0644, 1);
 	if ((*phi).s_stop == SEM_FAILED)
 		return (perror("sem_open stop"), KO);
 	//
@@ -92,7 +92,7 @@ int	create_philos(t_phi *phi)
 		}
 		i++;
 	}
-	is_a_dead(phi);
+	//is_a_dead(phi);
 	return (OK);
 }
 
