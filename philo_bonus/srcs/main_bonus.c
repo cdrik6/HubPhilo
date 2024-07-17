@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:58:18 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/17 00:37:08 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/17 20:56:32 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	main(int argc, char **argv)
 		create_philos(&phi);
 		if (wait_dead(phi) == OK)
 		{
-			sem_post(phi.s_stop);
+			// sem_post(phi.s_stop);
 			sem_close(phi.s_forks);
 			sem_close(phi.s_print);
 			sem_close(phi.s_meal);
@@ -65,9 +65,7 @@ int	wait_dead(t_phi phi)
 				while (i < phi.nb_philo)
 				{
 					if (kill(phi.philos[i].pid, SIGKILL) == -1)
-					{
 						k = i;
-					}
 					i++;
 				}
 				printf("%ld %d %s\n", gettime_ms() - (phi).start,
