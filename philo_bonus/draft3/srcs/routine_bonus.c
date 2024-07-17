@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 20:32:11 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/17 02:56:08 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/17 02:05:55 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,11 @@
 
 void	routine(t_phi *phi, t_philo *philo)
 {
-	
+	// if ((*philo).nb_philo == 1)
+	// 	eating_alone(philo);
+	// else
+	// {
+	// while (1)
 	if ((*philo).id % 2 == 0)
 		ft_msleep(1);
 	// dead_msleep((*phi).time_to_eat + 1, philo);
@@ -84,10 +88,8 @@ void	sleeping(t_phi *phi, t_philo *philo)
 {
 	// if (is_dead(philo) == 0)
 	// {
-	// if (is_over(philo) == 1)
-	// 	return ;
-	print_log(philo, SLEEPING);			
-	dead_msleep((*phi).time_to_sleep, philo);	
+	print_log(philo, SLEEPING);
+	dead_msleep((*phi).time_to_sleep, philo);
 	// ft_msleep((*phi).time_to_sleep);
 	// }
 }

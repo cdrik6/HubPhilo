@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 22:59:31 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/17 02:45:50 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/17 01:08:09 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,6 @@ void	*monitor(void *data)
 		
 		if (is_over(philo) == 1)
 		{
-			//dead_msleep((*philo).time_to_eat, philo);
 			//printf("ici\n");
 			break;
 		}
