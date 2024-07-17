@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:22:06 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/15 22:43:34 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/16 23:56:57 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ typedef struct s_phi
 	time_t		time_to_eat;
 	time_t		time_to_sleep;
 	int			must_eat;
-	// int			is_dead;
+	//int			is_dead;
 	time_t		start;
 	//
 	sem_t		*s_forks;
@@ -152,6 +152,7 @@ void			thinking(t_philo *philo);
 // void		thinking(t_philo *philo);
 
 // monitor.c
+int	is_over(t_philo *philo);
 void			*monitor(void *data);
 int				is_to_die(t_philo *philo);
 // int				is_a_dead(t_phi *phi);

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:58:18 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/13 05:27:02 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/17 00:37:08 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,12 @@ int	main(int argc, char **argv)
 
 	if (check_args(argc, argv) == KO)
 		return (KO);
-	// printf("sizeof(t_philo) = %ld\n", sizeof(t_philo));
-	// pid = ft_calloc(ft_atoll(argv[1]), sizeof(pid_t));
 	philos = ft_calloc(ft_atoll(argv[1]), sizeof(t_philo));
 	if (!philos)
 		return (KO);
-	// phi = (t_phi){0};
 	if (init_phi(&phi, philos, argv) == OK)
 	{
 		create_philos(&phi);
-		// create_thread(&phi);
 		if (wait_dead(phi) == OK)
 		{
 			sem_post(phi.s_stop);
@@ -42,45 +38,44 @@ int	main(int argc, char **argv)
 			sem_unlink(S_DEAD);
 			sem_unlink(S_MEAL);
 			sem_unlink(S_STOP);
-			free(philos);			
+			free(philos);
 		}
-		// pthread_join(phi.thread, NULL);
-		
 		return (OK);
 	}
 	else
 		return (free(philos), KO);
 }
 
-//
+// printf("pid %d = %d\n", i + 1, phi.philos[i].pid);
+// printf("kill %d = %d\n", i+ 1,kill(phi.philos[i].pid, SIGKILL));
+// printf("status =%d\n", WEXITSTATUS(status));
 int	wait_dead(t_phi phi)
 {
 	int	status;
 	int	i;
+	int	k;
 
 	while (1)
 	{
 		if (waitpid(-1, &status, 0) != -1)
 		{
-			i = 0;
-			while (i < phi.nb_philo)
+			if (WEXITSTATUS(status) == 1)
 			{
-				// printf("pid %d = %d\n", i + 1, phi.philos[i].pid);
-				// printf("kill %d = %d\n", i + 1, kill(phi.philos[i].pid,	SIGKILL));
-				kill(phi.philos[i].pid,	SIGKILL);
-				i++;
+				i = 0;
+				while (i < phi.nb_philo)
+				{
+					if (kill(phi.philos[i].pid, SIGKILL) == -1)
+					{
+						k = i;
+					}
+					i++;
+				}
+				printf("%ld %d %s\n", gettime_ms() - (phi).start,
+					phi.philos[k].id, DIED);
 			}
 			return (OK);
 		}
-		
 	}
-	// if (WIFEXITED(status))
-	// {
-	// 	if (WEXITSTATUS(status) == OK)
-	// 	{
-	// 		return (OK);
-	// 	}
-	// }
 	return (KO);
 }
 

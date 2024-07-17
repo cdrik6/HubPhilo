@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:13:26 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/16 04:58:23 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/17 01:08:47 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,20 +36,20 @@ int	init_sem(t_phi *phi)
 	sem_unlink(S_DEAD);
 	sem_unlink(S_MEAL);
 	sem_unlink(S_STOP);
-	(*phi).s_forks = sem_open(S_FORKS, O_CREAT | O_EXCL, 0644, (*phi).nb_philo);
+	(*phi).s_forks = sem_open(S_FORKS, O_CREAT | O_EXCL, 0666, (*phi).nb_philo);
 	if ((*phi).s_forks == SEM_FAILED)
 		return (perror("sem_open forks"), KO);
-	(*phi).s_print = sem_open(S_PRINT, O_CREAT | O_EXCL, 0644, 1);
+	(*phi).s_print = sem_open(S_PRINT, O_CREAT | O_EXCL, 0666, 1);
 	if ((*phi).s_print == SEM_FAILED)
 		return (perror("sem_open print"), KO);
-	(*phi).s_dead = sem_open(S_DEAD, O_CREAT | O_EXCL, 0644, 1);
+	(*phi).s_dead = sem_open(S_DEAD, O_CREAT | O_EXCL, 0666, 1);
 	if ((*phi).s_dead == SEM_FAILED)
 		return (perror("sem_open dead"), KO);
-	(*phi).s_meal = sem_open(S_MEAL, O_CREAT | O_EXCL, 0644, 1);
+	(*phi).s_meal = sem_open(S_MEAL, O_CREAT | O_EXCL, 0666, 1);
 	if ((*phi).s_meal == SEM_FAILED)
 		return (perror("sem_open meal"), KO);
 	//
-	(*phi).s_stop = sem_open(S_STOP, O_CREAT | O_EXCL, 0644, 1);
+	(*phi).s_stop = sem_open(S_STOP, O_CREAT | O_EXCL, 0666, 1);
 	if ((*phi).s_stop == SEM_FAILED)
 		return (perror("sem_open stop"), KO);
 	//
@@ -62,6 +62,7 @@ int	create_philos(t_phi *phi)
 {
 	int		i;
 	pid_t	pid;
+	int		code;
 
 	i = 0;
 	while (i < (*phi).nb_philo)
@@ -77,6 +78,10 @@ int	create_philos(t_phi *phi)
 			routine(phi, &(*phi).philos[i]);
 			pthread_join((*phi).philos[i].thread, NULL);
 			//
+			if (is_dead(&(*phi).philos[i]) == 1)
+				code = 1;
+			else
+				code = 0;	
 			sem_close((*phi).s_forks);
 			sem_close((*phi).s_print);
 			sem_close((*phi).s_meal);
@@ -88,11 +93,11 @@ int	create_philos(t_phi *phi)
 			// sem_unlink(S_MEAL);
 			free((*phi).philos);
 			// //exit((*phi).philos[i].pid);
-			exit(0);
+			exit(code);
 		}
 		i++;
 	}
-	//is_a_dead(phi);
+	// is_a_dead(phi);
 	return (OK);
 }
 
