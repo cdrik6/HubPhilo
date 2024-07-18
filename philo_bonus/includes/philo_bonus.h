@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:22:06 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/17 22:25:14 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/18 04:55:06 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <errno.h>
 
 # ifndef MAX_PHILO
 #  define MAX_PHILO 200

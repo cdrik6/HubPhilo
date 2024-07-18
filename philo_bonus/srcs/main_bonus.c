@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:58:18 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/18 02:58:00 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/18 05:38:17 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	wait_dead(t_phi phi)
 	int	k;
 
 	k = 0;
-	while (1)
+	while (errno != ECHILD)
 	{
 		if (waitpid(-1, &status, 0) != -1)
 		{
@@ -64,23 +64,11 @@ int	wait_dead(t_phi phi)
 				}
 				printf("%ld %d %s\n", gettime_ms() - (phi).start,
 					phi.philos[k].id, DIED);
+				return (OK);
 			}
-			if (WEXITSTATUS(status) == 0)
-			{
-				i = 0;
-				while (i < phi.nb_philo)
-				{
-					if (kill(phi.philos[i].pid, SIGKILL) == -1)
-						k = i;
-					i++;
-				}
-				printf("%ld %d %s\n", gettime_ms() - (phi).start,
-					phi.philos[k].id, "toto");
-			}
-			return (OK);
 		}
 	}
-	return (KO);
+	return (OK);
 }
 
 int	check_args(int argc, char **argv)

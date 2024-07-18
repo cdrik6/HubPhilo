@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 20:32:11 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/18 02:59:51 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/18 06:04:12 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,12 @@ void	eating(t_phi *phi, t_philo *philo)
 	print_log(philo, FORKING);
 	print_log(philo, EATING);
 	sem_wait((*phi).s_meal);
-	// (*philo).nb_meal++;
+	(*philo).nb_meal++;
 	(*philo).last_meal = gettime_ms();
 	sem_post((*phi).s_meal);
 	dead_msleep((*phi).time_to_eat, philo);
 	sem_post((*phi).s_forks);
 	sem_post((*phi).s_forks);
-	sem_wait((*phi).s_meal);
-	(*philo).nb_meal++;
-	sem_post((*phi).s_meal);
 }
 
 void	sleeping(t_phi *phi, t_philo *philo)
@@ -63,6 +60,6 @@ void	thinking(t_philo *philo)
 			dead_msleep((*philo).time_to_eat - (*philo).time_to_sleep + 1,
 				philo);
 		else
-			usleep(500);
+			usleep(1000); /************ */
 	}
 }
