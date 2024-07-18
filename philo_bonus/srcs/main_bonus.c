@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:58:18 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/17 20:56:32 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/18 02:58:00 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,13 @@ int	main(int argc, char **argv)
 		create_philos(&phi);
 		if (wait_dead(phi) == OK)
 		{
-			// sem_post(phi.s_stop);
-			sem_close(phi.s_forks);
-			sem_close(phi.s_print);
-			sem_close(phi.s_meal);
-			sem_close(phi.s_dead);
-			sem_close(phi.s_stop);
+			close_semaphore(&phi);
 			sem_unlink(S_FORKS);
 			sem_unlink(S_PRINT);
 			sem_unlink(S_DEAD);
 			sem_unlink(S_MEAL);
-			sem_unlink(S_STOP);
-			free(philos);
 		}
-		return (OK);
+		return (free(philos), OK);
 	}
 	else
 		return (free(philos), KO);
@@ -55,6 +48,7 @@ int	wait_dead(t_phi phi)
 	int	i;
 	int	k;
 
+	k = 0;
 	while (1)
 	{
 		if (waitpid(-1, &status, 0) != -1)
@@ -70,6 +64,18 @@ int	wait_dead(t_phi phi)
 				}
 				printf("%ld %d %s\n", gettime_ms() - (phi).start,
 					phi.philos[k].id, DIED);
+			}
+			if (WEXITSTATUS(status) == 0)
+			{
+				i = 0;
+				while (i < phi.nb_philo)
+				{
+					if (kill(phi.philos[i].pid, SIGKILL) == -1)
+						k = i;
+					i++;
+				}
+				printf("%ld %d %s\n", gettime_ms() - (phi).start,
+					phi.philos[k].id, "toto");
 			}
 			return (OK);
 		}
@@ -104,17 +110,10 @@ int	check_args(int argc, char **argv)
 	return (OK);
 }
 
-// void	free_phi(t_philo *philos, pthread_mutex_t *forks)
-// {
-// 	free(philos);
-// 	free(forks);
-// }
-
-// // if (nb_philo == 1)
-// // 		alone(&phi);
-// void	alone(t_phi *phi)
-// {
-// 	print_log(&((*phi).philos[0]), FORKING);
-// 	ft_msleep((*phi).philos[0].time_to_die);
-// 	print_log(&((*phi).philos[0]), DIED);
-// }
+void	close_semaphore(t_phi *phi)
+{
+	sem_close((*phi).s_forks);
+	sem_close((*phi).s_print);
+	sem_close((*phi).s_meal);
+	sem_close((*phi).s_dead);
+}

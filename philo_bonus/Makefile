@@ -6,7 +6,7 @@
 #    By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/25 23:32:02 by caguillo          #+#    #+#              #
-#    Updated: 2024/07/14 22:24:45 by caguillo         ###   ########.fr        #
+#    Updated: 2024/07/17 22:26:19 by caguillo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,8 +25,7 @@ INCS_SRCS	=	./includes/philo_bonus.h
 INCS_DIR	=	-Iincludes
 
 CC			=	gcc
-#CFLAGS		=	-Wall -Wextra -Werror -pthread -D MAX_PHILO=200
-#CFLAGS		=	-Wall -Wextra -Werror -pthread -fsanitize=thread -g
+
 CFLAGS		=	-Wall -Wextra -Werror -pthread -g 
 
 OBJS		=	$(SRCS:.c=.o)

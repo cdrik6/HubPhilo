@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 22:59:31 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/17 01:08:09 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/17 21:14:19 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,16 @@ int	is_over(t_philo *philo)
 	if ((*philo).must_eat == -1)
 		return (0);
 	sem_wait(*(*philo).s_meal);
-	if ((*philo).nb_meal < (*philo).must_eat)
-		return (sem_post(*(*philo).s_meal), 0);
+	if ((*philo).nb_meal >= (*philo).must_eat)
+	{
+		sem_post(*(*philo).s_meal);		
+		return (1);
+	}
 	sem_post(*(*philo).s_meal);
 	// pthread_mutex_lock(&((*phi).m_dead));
 	// (*phi).is_dead = 1;
 	// pthread_mutex_unlock(&((*phi).m_dead));
-	return (1);
+	return (0);
 }
 
 void	*monitor(void *data)
@@ -77,7 +80,7 @@ void	*monitor(void *data)
 	{
 		// if (is_a_dead(phi) == 1 || is_all_over(phi) == 1)
 		// sem_wait(*(*philo).s_stop);
-		if (is_to_die(philo) == 1 )
+		if (is_to_die(philo) == 1)
 		{
 			// // exit(0);
 			// //kill((*philo).pid,	SIGKILL);
@@ -109,13 +112,13 @@ void	*monitor(void *data)
 			break ;
 		}
 		// sem_post(*(*philo).s_stop);
-		
 		if (is_over(philo) == 1)
 		{
-			//printf("ici\n");
-			break;
+			dead_msleep((*philo).time_to_eat, philo);
+			// printf("ici\n");
+			break ;
 		}
-		usleep(100);	
+		usleep(100);
 	}
 	return (NULL);
 }

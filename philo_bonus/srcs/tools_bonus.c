@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 00:29:37 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/17 02:31:32 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/18 02:45:20 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,30 +41,17 @@ void	dead_msleep(long ms, t_philo *philo)
 	long	start;
 
 	start = gettime_ms();
-	while ((gettime_ms() - start) < ms && is_dead(philo) == 0)	
+	while ((gettime_ms() - start) < ms && is_dead(philo) == 0)
 		usleep(500);
 }
 
-
 void	print_log(t_philo *philo, char *str)
 {
-	
-	if (is_dead(philo) == 0 && is_over(philo) == 0 )
+	if (is_dead(philo) == 0 && is_over(philo) == 0)
+	//if (is_dead(philo) == 0)
 	{
-		// sem_wait(*(*philo).s_stop);
 		sem_wait(*((*philo).s_print));
 		printf("%ld %d %s\n", gettime_ms() - (*philo).start, (*philo).id, str);
 		sem_post(*((*philo).s_print));
-		// sem_post(*(*philo).s_stop);
 	}
-	
 }
-
-// void	eating_alone(t_philo *philo)
-// {
-// 	pthread_mutex_lock((*philo).right_fork);
-// 	print_log(philo, FORKING);
-// 	pthread_mutex_unlock((*philo).right_fork);
-// }
-// // ft_msleep((*philo).time_to_die);
-// // print_log(philo, DIED);
