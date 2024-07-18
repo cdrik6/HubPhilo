@@ -6,12 +6,21 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:58:18 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/18 22:45:12 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/07 04:16:41 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
+// phi = (t_phi){0};
+// printf("%lld", ft_atoll(argv[2]));
+// if (create_thread(&phi) == OK)
+// int				nb_philo;
+// nb_philo = ft_atoll(argv[1]);
+// if (init_phi(&phi, philos, argv) == OK && init_forks(forks, nb_philo) == OK)
+// issue_id = 1;
+// t_philo			philos[MAX_PHILO];
+// pthread_mutex_t	forks[MAX_PHILO];
 int	main(int argc, char **argv)
 {
 	t_phi			phi;
@@ -27,9 +36,10 @@ int	main(int argc, char **argv)
 	forks = ft_calloc(ft_atoll(argv[1]), sizeof(pthread_mutex_t));
 	if (!forks)
 		return (free(philos), KO);
+	// phi = (t_phi){0};	
 	mut_id = init_phi(&phi, philos, forks, argv);
 	if (mut_id == 0)
-		return (philosopher(&phi, philos, forks, argv));
+		return(philosopher(&phi, philos, forks, argv));
 	else
 	{
 		destroy_mutex_id(&phi, forks, mut_id);

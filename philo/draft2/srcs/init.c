@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:13:26 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/18 22:45:54 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/07 04:16:36 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int	init_phi(t_phi *phi, t_philo *philos, pthread_mutex_t *forks, char **argv)
 	else
 		(*phi).must_eat = -1;
 	(*phi).is_dead = 0;
+	// (*phi).ready = 0;
 	mut_id = init_forks((*phi).forks, (*phi).nb_philo);
 	if (mut_id != 0)
 		return (mut_id);
@@ -78,6 +79,7 @@ void	init_philos(t_phi *phi, t_philo *philos, pthread_mutex_t *forks,
 		philos[i].time_to_eat = ft_atoll(argv[3]);
 		philos[i].time_to_sleep = ft_atoll(argv[4]);
 		philos[i].nb_meal = 0;
+		//philos[i].eating = 0;		
 		philos[i].dead = &((*phi).is_dead);
 		philos[i].m_print = &((*phi).m_print);
 		philos[i].m_dead = &((*phi).m_dead);
@@ -98,3 +100,4 @@ void	init_philos(t_phi *phi, t_philo *philos, pthread_mutex_t *forks,
 // 	(*philo).time_to_eat = ft_atoll(argv[3]);
 // 	(*philo).time_to_sleep = ft_atoll(argv[4]);
 // }
+

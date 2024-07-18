@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:22:06 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/18 22:45:43 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/07 04:16:20 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@
 # define KO 1
 # define NBM 3
 # define ERR_ARG "philo: wrong number of arguments\n"
-# define USAGE "Usage: ./philo number_of_philosophers time_to_die (ms) \
+# define USAGE \
+	"Usage: ./philo number_of_philosophers time_to_die (ms) \
 	time_to_eat (ms) time_to_sleep (ms) \
 	[number_of_times_each_philosopher_must_eat]\n"
 # define MIN_NBP "philo: invalid number_of_philosophers\n"
@@ -39,10 +40,10 @@
 # define EATING "is eating"
 # define SLEEPING "is sleeping"
 # define THINKING "is thinking"
-# define DIED "died"
 # define FORKING "has taken a fork"
 # define FORKING_L "has taken a fork left"
 # define FORKING_R "has taken a fork right"
+# define DIED "died"
 
 typedef struct s_philo
 {
@@ -55,6 +56,7 @@ typedef struct s_philo
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				nb_meal;
+	// int				eating;
 	int				*dead;
 	pthread_mutex_t	*right_fork;
 	pthread_mutex_t	*left_fork;
@@ -70,6 +72,7 @@ typedef struct s_phi
 	int				nb_philo;
 	int				must_eat;
 	int				is_dead;
+	// int				ready;
 	pthread_mutex_t	m_print;
 	pthread_mutex_t	m_dead;
 	pthread_mutex_t	m_meal;
@@ -94,7 +97,6 @@ void				init_philos(t_phi *phi, t_philo *philo,
 long				gettime_ms(void);
 void				print_log(t_philo *philo, char *str);
 void				ft_msleep(long ms);
-void				dead_msleep(long ms, t_philo *philo);
 void				eating_alone(t_philo *philo);
 
 // utils.c

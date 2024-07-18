@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 22:59:31 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/18 22:44:37 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/07 04:17:00 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,22 @@ int	is_all_over(t_phi *phi)
 
 void	monitor(t_phi *phi)
 {
+	// int	ready;
+
+	// ready = 0;
+	// while (ready != (*phi).nb_philo)
+	// {
+	// 	usleep(100);
+	// 	pthread_mutex_lock(&((*phi).m_dead));
+	// 	ready = (*phi).ready;
+	// 	pthread_mutex_unlock(&((*phi).m_dead));
+	// 	//printf("%d\n", ready);
+	// }
 	while (1)
 	{
 		if (is_a_dead(phi) == 1 || is_all_over(phi) == 1)
 			break ;
+		//usleep(10);
 	}
 }
 
