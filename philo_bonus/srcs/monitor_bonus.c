@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 22:59:31 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/18 05:46:35 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/18 20:54:45 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	*monitor(void *data)
 	philo = (t_philo *)data;
 	while (1)
 	{
-		
 		if (is_to_die(philo) == 1)
 		{
 			sem_wait(*(*philo).s_dead);
@@ -36,7 +35,7 @@ void	*monitor(void *data)
 		}
 		if (is_over(philo) == 1)
 			break ;
-		usleep(500);	
+		usleep(100);
 	}
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:13:26 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/18 05:19:03 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/18 20:48:31 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	create_philos(t_phi *phi)
 		if (pid == 0)
 		{
 			if (create_thread(&(*phi).philos[i]) == OK)
-				philo_child(phi, &(*phi).philos[i], &code);
+				philo_child(&(*phi).philos[i], &code);
 			else
 				code = 1;
 			close_semaphore(phi);
@@ -102,15 +102,16 @@ void	init_philo(t_phi *phi, pid_t pid, int i)
 	(*phi).philos[i].dead = 0;
 }
 
-void	philo_child(t_phi *phi, t_philo *philo, int *code)
+void	philo_child(t_philo *philo, int *code)
 {
-	routine(phi, philo);
+	routine(philo);
 	pthread_join((*philo).thread, NULL);
 	if (is_dead(philo) == 1)
 		*code = 1;
 	else
 		*code = 0;
 }
+
 // routine(phi, &(*phi).philos[i]);
 // pthread_join((*phi).philos[i].thread, NULL);
 // if (is_dead(&(*phi).philos[i]) == 1)

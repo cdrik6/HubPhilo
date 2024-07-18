@@ -6,13 +6,14 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 21:22:06 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/18 04:55:06 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/18 20:55:23 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_BONUS_H
 # define PHILO_BONUS_H
 
+# include <errno.h>
 # include <fcntl.h> // For O_* constants
 # include <limits.h>
 # include <pthread.h>
@@ -24,7 +25,6 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include <errno.h>
 
 # ifndef MAX_PHILO
 #  define MAX_PHILO 200
@@ -102,7 +102,7 @@ int				init_phi(t_phi *phi, t_philo *philos, char **argv);
 int				init_sem(t_phi *phi);
 int				create_philos(t_phi *phi);
 void			init_philo(t_phi *phi, pid_t pid, int i);
-void			philo_child(t_phi *phi, t_philo *philo, int *code);
+void			philo_child(t_philo *philo, int *code);
 
 // tools.c
 long			gettime_ms(void);
@@ -121,9 +121,10 @@ void			*ft_calloc(size_t nb_elem, size_t size_elem);
 int				create_thread(t_philo *philo);
 
 // routine.c
-void			routine(t_phi *phi, t_philo *philo);
-void			eating(t_phi *phi, t_philo *philo);
-void			sleeping(t_phi *phi, t_philo *philo);
+
+void			routine(t_philo *philo);
+void			eating(t_philo *philo);
+void			sleeping(t_philo *philo);
 void			thinking(t_philo *philo);
 
 // monitor.c
