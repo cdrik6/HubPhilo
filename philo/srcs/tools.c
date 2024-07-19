@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 00:29:37 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/18 22:43:57 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/19 19:27:32 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ long	gettime_ms(void)
 	struct timeval	t;
 
 	if (gettimeofday(&t, NULL) == -1)
-		perror("philo: gettimeofday");
+		printf("philo: gettimeofday error");
 	return (t.tv_sec * 1000 + t.tv_usec / 1000);
 }
 

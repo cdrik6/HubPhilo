@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:13:26 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/18 20:48:31 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/19 19:30:55 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,16 @@ int	init_sem(t_phi *phi)
 	sem_unlink(S_MEAL);
 	(*phi).s_forks = sem_open(S_FORKS, O_CREAT | O_EXCL, 0666, (*phi).nb_philo);
 	if ((*phi).s_forks == SEM_FAILED)
-		return (perror("sem_open forks"), KO);
+		return (printf("sem_open forks error"), KO);
 	(*phi).s_print = sem_open(S_PRINT, O_CREAT | O_EXCL, 0666, 1);
 	if ((*phi).s_print == SEM_FAILED)
-		return (perror("sem_open print"), KO);
+		return (printf("sem_open print error"), KO);
 	(*phi).s_dead = sem_open(S_DEAD, O_CREAT | O_EXCL, 0666, 1);
 	if ((*phi).s_dead == SEM_FAILED)
-		return (perror("sem_open dead"), KO);
+		return (printf("sem_open dead error"), KO);
 	(*phi).s_meal = sem_open(S_MEAL, O_CREAT | O_EXCL, 0666, 1);
 	if ((*phi).s_meal == SEM_FAILED)
-		return (perror("sem_open meal"), KO);
+		return (printf("sem_open meal error"), KO);
 	return (OK);
 }
 
@@ -66,7 +66,7 @@ int	create_philos(t_phi *phi)
 		pid = fork();
 		init_philo(phi, pid, i);
 		if (pid == -1)
-			return (perror("philo: fork"), KO);
+			return (printf("philo: fork error"), KO);
 		if (pid == 0)
 		{
 			if (create_thread(&(*phi).philos[i]) == OK)

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 20:13:26 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/18 22:45:54 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/19 19:25:56 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	init_a_mutex(pthread_mutex_t *mutex)
 {
 	if (pthread_mutex_init(mutex, NULL) != 0)
-		return (perror("philo: pthread_mutex_init"), KO);
+		return (printf("philo: pthread_mutex_init error"), KO);
 	return (OK);
 }
 

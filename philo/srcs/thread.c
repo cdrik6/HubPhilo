@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 22:58:12 by caguillo          #+#    #+#             */
-/*   Updated: 2024/07/18 22:44:12 by caguillo         ###   ########.fr       */
+/*   Updated: 2024/07/19 19:27:10 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	create_thread(t_phi *phi)
 	{
 		if (pthread_create(&((*phi).philos[i].thread), NULL, &routine,
 				&((*phi).philos[i])) != 0)
-			return (perror("philo: pthread_create"), i + 1);
+			return (printf("philo: pthread_create error"), i + 1);
 		i++;
 	}
 	return (0);
@@ -43,7 +43,7 @@ int	join_thread(t_phi *phi, int issue_id)
 	while (i < max)
 	{
 		if (pthread_join((*phi).philos[i].thread, NULL) != 0)
-			return (perror("philo: pthread_join"), KO);
+			return (printf("philo: pthread_join error"), KO);
 		i++;
 	}
 	return (OK);
@@ -52,7 +52,7 @@ int	join_thread(t_phi *phi, int issue_id)
 int	destroy_a_mutex(pthread_mutex_t *mutex)
 {
 	if (pthread_mutex_destroy(&(*mutex)) != 0)
-		return (perror("philo: pthread_mutex_destroy"), KO);
+		return (printf("philo: pthread_mutex_destroy error"), KO);
 	return (OK);
 }
 
