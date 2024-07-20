@@ -1,4 +1,4 @@
-Grand merci a Laura et Mathieu qui m'ont beaucoup aide sur ce projet !
+Grand merci a Laura, Kilian et Mathieu qui m'ont beaucoup aide sur ce projet !
 
 https://github.com/lbarry9/42/
 
