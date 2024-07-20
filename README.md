@@ -10,7 +10,11 @@ Ce projet m'a bien pris un mois et demi quand certains le font en deux semaines 
 
 
 Ressources :
+
 Toutes les videos CodeVault
+
 https://www.codequoi.com/threads-mutex-et-programmation-concurrente-en-c/
+
 https://medium.com/@ruinadd/philosophers-42-guide-the-dining-philosophers-problem-893a24bc0fe2
+
 Un tres bon testeur pour reflechir et accompagner son travail : https://github.com/Rz-Rz/thales_tester
